@@ -1,0 +1,39 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+
+# Compiled object files
+*.o
+*.obj
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Libraries
+*.a
+*.so
+*.dylib
+
+# Executables
+*.exe
+*.out
+a.out
+
+# Build directories
+build/
+cmake-build-*/
+
+# Logs
+*.log
+
+
+test/test_lookback
+
+
+# Temporary files
+*~
