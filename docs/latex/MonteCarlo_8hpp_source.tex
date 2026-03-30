@@ -1,0 +1,45 @@
+\hypertarget{MonteCarlo_8hpp_source}{}\doxysection{Monte\+Carlo.\+hpp}
+\label{MonteCarlo_8hpp_source}\index{include/MonteCarlo.hpp@{include/MonteCarlo.hpp}}
+\mbox{\hyperlink{MonteCarlo_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00001}00001 \textcolor{preprocessor}{\#ifndef MONTECARLO\_HPP}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00002}00002 \textcolor{preprocessor}{\#define MONTECARLO\_HPP}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{BlackScholesModel_8hpp}{BlackScholesModel.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{LookbackOption_8hpp}{LookbackOption.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00005}00005 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00006}00006 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00007}\mbox{\hyperlink{classMonteCarloSimulator}{00007}} \textcolor{keyword}{class }\mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00008}00008 \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00009}00009     \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00010}00010         \textcolor{keyword}{const} \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}}\& model\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00011}00011         \textcolor{keywordtype}{int} numPaths\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00012}00012         \textcolor{keywordtype}{int} numSteps\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00013}00013         \textcolor{keywordtype}{int} batchSize\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00014}00014         \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} seed;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00015}00015     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00016}\mbox{\hyperlink{classMonteCarloSimulator_a899f1482da4e10d135fefbfc7ae37c5f}{00016}}         \mbox{\hyperlink{classMonteCarloSimulator_a899f1482da4e10d135fefbfc7ae37c5f}{MonteCarloSimulator}}(\textcolor{keyword}{const} \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}}\& model, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} batchSize = 1, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} seed = 42) : }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00017}00017                             model\_(model), numPaths\_(numPaths), numSteps\_(numSteps), batchSize\_(batchSize), seed(seed) \{\};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00018}\mbox{\hyperlink{classMonteCarloSimulator_add1774a1a0d5f428cfbbca4c964c4c8b}{00018}}         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}}\& \mbox{\hyperlink{classMonteCarloSimulator_add1774a1a0d5f428cfbbca4c964c4c8b}{setBatchSize}}(\textcolor{keywordtype}{int} batchSize) }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00019}00019         \{ }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00020}00020             \textcolor{keywordflow}{if} (batchSize <= 0)}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00021}00021                 \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}batchSize must be > 0"{}});}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00022}00022             batchSize\_ = batchSize; }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00023}00023             \textcolor{keywordflow}{return} *\textcolor{keyword}{this}; }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00024}00024         \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00025}\mbox{\hyperlink{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}{00025}}         \textcolor{keyword}{const} \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}}\& \mbox{\hyperlink{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}{getModel}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} model\_; \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00026}\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{00026}}         \textcolor{keywordtype}{int} \mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} numPaths\_; \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00027}\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{00027}}         \textcolor{keywordtype}{int} \mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} numSteps\_; \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00028}\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{00028}}         \textcolor{keywordtype}{int} \mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} batchSize\_; \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00029}\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{00029}}         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} seed; \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00030}\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{00030}}         \textcolor{keyword}{struct }\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MCResult}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00031}00031         \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00032}\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a1819ede586658398efa3ccff1c994d3f}{00032}}             \textcolor{keywordtype}{double} \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a1819ede586658398efa3ccff1c994d3f}{price}};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00033}\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a8e04aaa04458fd0c3a6f6777b38d1fd8}{00033}}             \textcolor{keywordtype}{double} \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a8e04aaa04458fd0c3a6f6777b38d1fd8}{stdError}};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00034}\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a4437f9da0644a7dfdaab3ae31b364ef8}{00034}}             \textcolor{keywordtype}{double} \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a4437f9da0644a7dfdaab3ae31b364ef8}{ciLower}};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00035}\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a3ff915bbbda2a32b1b9eebc2dca7069c}{00035}}             \textcolor{keywordtype}{double} \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a3ff915bbbda2a32b1b9eebc2dca7069c}{ciUpper}};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00036}00036         \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00037}00037         \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MCResult}} \mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(\textcolor{keyword}{const} \mbox{\hyperlink{classLookbackOption}{LookbackOption}}\& option, \textcolor{keywordtype}{double} t0, \textcolor{keywordtype}{double} z = 1.96) \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00038}00038 \};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8hpp_source_l00039}00039 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// MONTECARLO\_HPP}}
+
+\end{DoxyCode}

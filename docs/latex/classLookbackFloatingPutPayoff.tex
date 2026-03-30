@@ -1,0 +1,85 @@
+\hypertarget{classLookbackFloatingPutPayoff}{}\doxysection{Lookback\+Floating\+Put\+Payoff Class Reference}
+\label{classLookbackFloatingPutPayoff}\index{LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}}
+
+
+{\ttfamily \#include $<$Lookback\+Option.\+hpp$>$}
+
+
+
+Inheritance diagram for Lookback\+Floating\+Put\+Payoff\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classLookbackFloatingPutPayoff__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Lookback\+Floating\+Put\+Payoff\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classLookbackFloatingPutPayoff__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classLookbackFloatingPutPayoff_a7a73963c453978923bf612c187767c85}{Lookback\+Floating\+Put\+Payoff}} ()
+\item 
+double \mbox{\hyperlink{classLookbackFloatingPutPayoff_a99950e19ab925d5e18a840bc209bf951}{operator()}} (double spot, double strike) const override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00047}{47}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classLookbackFloatingPutPayoff_a7a73963c453978923bf612c187767c85}\label{classLookbackFloatingPutPayoff_a7a73963c453978923bf612c187767c85}} 
+\index{LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}!LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}}
+\index{LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}!LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}}
+\doxysubsubsection{\texorpdfstring{LookbackFloatingPutPayoff()}{LookbackFloatingPutPayoff()}}
+{\footnotesize\ttfamily Lookback\+Floating\+Put\+Payoff\+::\+Lookback\+Floating\+Put\+Payoff (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00050}{50}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00050 : \mbox{\hyperlink{classPayoff_a7c90e584d3e85b04f82677ccbfd9fe4f}{Payoff}}() \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classLookbackFloatingPutPayoff_a99950e19ab925d5e18a840bc209bf951}\label{classLookbackFloatingPutPayoff_a99950e19ab925d5e18a840bc209bf951}} 
+\index{LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}!operator()@{operator()}}
+\index{operator()@{operator()}!LookbackFloatingPutPayoff@{LookbackFloatingPutPayoff}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double Lookback\+Floating\+Put\+Payoff\+::operator() (\begin{DoxyParamCaption}\item[{double}]{spot,  }\item[{double}]{strike }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classPayoff_a2eff8d33d2a0f8c3f12a4b0eb6adf6b1}{Payoff}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00051}{51}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00052     \{}
+\DoxyCodeLine{00053         \textcolor{keywordflow}{return} strike -\/ spot; \textcolor{comment}{// Always ≥ 0 for floating put}}
+\DoxyCodeLine{00054     \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{LookbackOption_8hpp}{Lookback\+Option.\+hpp}}\end{DoxyCompactItemize}

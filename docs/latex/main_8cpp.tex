@@ -1,0 +1,147 @@
+\hypertarget{main_8cpp}{}\doxysection{src/main.cpp File Reference}
+\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$iomanip$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include \char`\"{}Black\+Scholes\+Model.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Monte\+Carlo.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Lookback\+Option.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Greeks.\+hpp\char`\"{}}\newline
+Include dependency graph for main.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::string \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{get\+Arg}} (int argc, char $\ast$$\ast$argv, const std\+::string \&key, const std\+::string \&def=\char`\"{}\char`\"{})
+\item 
+int \mbox{\hyperlink{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}\label{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}} 
+\index{main.cpp@{main.cpp}!getArg@{getArg}}
+\index{getArg@{getArg}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{getArg()}{getArg()}}
+{\footnotesize\ttfamily static std\+::string get\+Arg (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv,  }\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{def = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00017}{17}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00020 \{}
+\DoxyCodeLine{00021     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i + 1 < argc; ++i)}
+\DoxyCodeLine{00022         \textcolor{keywordflow}{if} (std::string(argv[i]) == key)}
+\DoxyCodeLine{00023             \textcolor{keywordflow}{return} std::string(argv[i + 1]);}
+\DoxyCodeLine{00024     \textcolor{keywordflow}{return} def;}
+\DoxyCodeLine{00025 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00027}{27}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028 \{}
+\DoxyCodeLine{00029     \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{00030         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00031         \textcolor{comment}{// 0) Parse args}}
+\DoxyCodeLine{00032         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00033         \textcolor{keyword}{const} \textcolor{keywordtype}{double} r     = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/r"{}}, \textcolor{stringliteral}{"{}0.05"{}}));}
+\DoxyCodeLine{00034         \textcolor{keyword}{const} \textcolor{keywordtype}{double} sigma = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/sigma"{}}, \textcolor{stringliteral}{"{}0.20"{}}));}
+\DoxyCodeLine{00035         \textcolor{keyword}{const} \textcolor{keywordtype}{double} T     = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/T"{}}, \textcolor{stringliteral}{"{}1.0"{}}));}
+\DoxyCodeLine{00036         \textcolor{keyword}{const} \textcolor{keywordtype}{double} t0    = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/t0"{}}, \textcolor{stringliteral}{"{}0.0"{}}));}
+\DoxyCodeLine{00037 }
+\DoxyCodeLine{00038         \textcolor{keyword}{const} \textcolor{keywordtype}{int} numPaths  = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/paths"{}}, \textcolor{stringliteral}{"{}200000"{}}));}
+\DoxyCodeLine{00039         \textcolor{keyword}{const} \textcolor{keywordtype}{int} numSteps  = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/steps"{}}, \textcolor{stringliteral}{"{}252"{}}));}
+\DoxyCodeLine{00040         \textcolor{keyword}{const} \textcolor{keywordtype}{int} batchSize = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/batch"{}}, \textcolor{stringliteral}{"{}4"{}}));}
+\DoxyCodeLine{00041         \textcolor{keyword}{const} \textcolor{keywordtype}{int} seed      = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/seed"{}}, \textcolor{stringliteral}{"{}42"{}}));}
+\DoxyCodeLine{00042 }
+\DoxyCodeLine{00043         \textcolor{keyword}{const} \textcolor{keywordtype}{double} Smin = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/Smin"{}}, \textcolor{stringliteral}{"{}50"{}}));}
+\DoxyCodeLine{00044         \textcolor{keyword}{const} \textcolor{keywordtype}{double} Smax = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/Smax"{}}, \textcolor{stringliteral}{"{}150"{}}));}
+\DoxyCodeLine{00045         \textcolor{keyword}{const} \textcolor{keywordtype}{double} dS   = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/dS"{}}, \textcolor{stringliteral}{"{}5"{}}));}
+\DoxyCodeLine{00046 }
+\DoxyCodeLine{00047         \textcolor{keyword}{const} std::string type   = \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/type"{}}, \textcolor{stringliteral}{"{}CALL"{}});}
+\DoxyCodeLine{00048         \textcolor{keyword}{const} std::string outCsv = \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/out"{}}, \textcolor{stringliteral}{"{}price\_greeks.csv"{}});}
+\DoxyCodeLine{00049 }
+\DoxyCodeLine{00050         \textcolor{comment}{// NEW: z for confidence interval (default 95\%)}}
+\DoxyCodeLine{00051         \textcolor{keyword}{const} \textcolor{keywordtype}{double} z = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/z"{}}, \textcolor{stringliteral}{"{}1.96"{}}));}
+\DoxyCodeLine{00052 }
+\DoxyCodeLine{00053         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00054         \textcolor{comment}{// 1) Build option}}
+\DoxyCodeLine{00055         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00056         \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} lbCallPayoff;}
+\DoxyCodeLine{00057         \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}}  lbPutPayoff;}
+\DoxyCodeLine{00058 }
+\DoxyCodeLine{00059         std::unique\_ptr<LookbackOption> option;}
+\DoxyCodeLine{00060         \textcolor{keywordflow}{if} (type == \textcolor{stringliteral}{"{}CALL"{}})}
+\DoxyCodeLine{00061             option = std::make\_unique<LookbackCallOption>(lbCallPayoff, T);}
+\DoxyCodeLine{00062         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (type == \textcolor{stringliteral}{"{}PUT"{}})}
+\DoxyCodeLine{00063             option = std::make\_unique<LookbackPutOption>(lbPutPayoff, T);}
+\DoxyCodeLine{00064         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00065             \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown -\/-\/type (use CALL or PUT)"{}});}
+\DoxyCodeLine{00066 }
+\DoxyCodeLine{00067         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00068         \textcolor{comment}{// 2) Output}}
+\DoxyCodeLine{00069         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00070         std::ofstream file(outCsv);}
+\DoxyCodeLine{00071         \textcolor{keywordflow}{if} (!file)}
+\DoxyCodeLine{00072             \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Cannot open output file: "{}} + outCsv);}
+\DoxyCodeLine{00073 }
+\DoxyCodeLine{00074         file << std::fixed << std::setprecision(10);}
+\DoxyCodeLine{00075 }
+\DoxyCodeLine{00076         \textcolor{comment}{// UPDATED: include MC uncertainty for price}}
+\DoxyCodeLine{00077         file << \textcolor{stringliteral}{"{}S0,Price,PriceStdError,PriceCILower,PriceCIUpper,Delta,Gamma,Vega,Rho,Theta\(\backslash\)n"{}};}
+\DoxyCodeLine{00078 }
+\DoxyCodeLine{00079         \mbox{\hyperlink{classGreeksCalculator}{GreeksCalculator}} greeksCalc;}
+\DoxyCodeLine{00080 }
+\DoxyCodeLine{00081         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00082         \textcolor{comment}{// 3) Grid loop}}
+\DoxyCodeLine{00083         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00084         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{double} S0 = Smin; S0 <= Smax + 1e-\/12; S0 += dS)}
+\DoxyCodeLine{00085         \{}
+\DoxyCodeLine{00086             \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{00087             \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcBase(model, numPaths, numSteps, batchSize, seed);}
+\DoxyCodeLine{00088 }
+\DoxyCodeLine{00089             \textcolor{comment}{// UPDATED: computeGreeks takes z}}
+\DoxyCodeLine{00090             \textcolor{keyword}{const} \mbox{\hyperlink{structGreeks}{Greeks}} g = greeksCalc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(*option, mcBase, t0, z);}
+\DoxyCodeLine{00091 }
+\DoxyCodeLine{00092             file << S0 << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00093                  << g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00094                  << g.\mbox{\hyperlink{structGreeks_a48d08e2f22d340698c2946931cea6a7c}{priceStdError}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00095                  << g.\mbox{\hyperlink{structGreeks_a6f0c04fcba6048715d2c0dff20ceb844}{priceCILower}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00096                  << g.\mbox{\hyperlink{structGreeks_a90c8347172d1640e136d6e8dda8b94c6}{priceCIUpper}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00097                  << g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00098                  << g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00099                  << g.\mbox{\hyperlink{structGreeks_a87709cf35763c458f36a6935f7d7ce25}{vega}}  << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00100                  << g.\mbox{\hyperlink{structGreeks_afaa454ff183cfa3d58902d49e4f363db}{rho}}   << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00101                  << g.\mbox{\hyperlink{structGreeks_a82fcb8b4f18e8afc91ab23df69ae6f17}{theta}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00102         \}}
+\DoxyCodeLine{00103 }
+\DoxyCodeLine{00104         std::cout << \textcolor{stringliteral}{"{}Wrote CSV: "{}} << outCsv << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00105         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{00106     \}}
+\DoxyCodeLine{00107     \textcolor{keywordflow}{catch} (\textcolor{keyword}{const} std::exception\& e) \{}
+\DoxyCodeLine{00108         std::cerr << \textcolor{stringliteral}{"{}ERROR: "{}} << e.what() << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00109         \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{00110     \}}
+\DoxyCodeLine{00111 \}}
+
+\end{DoxyCode}

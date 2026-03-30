@@ -1,0 +1,220 @@
+\label{index_md_README}%
+\Hypertarget{index_md_README}%
+ \hypertarget{index_autotoc_md1}{}\doxysection{Overview}\label{index_autotoc_md1}
+This project implements a European {\bfseries{floating-\/strike lookback option}} pricer under the {\bfseries{Black–\+Scholes}} model using {\bfseries{Monte Carlo}} simulation in {\bfseries{C++}}, with an {\bfseries{Excel/\+VBA}} interface for inputs and visualization.
+
+The implementation outputs\+:
+\begin{DoxyItemize}
+\item option price
+\item \mbox{\hyperlink{structGreeks}{Greeks}}\+: Delta, Gamma, Vega, Rho, Theta
+\item charts\+: Price(\+S0) and Delta(\+S0)
+\end{DoxyItemize}\hypertarget{index_autotoc_md2}{}\doxysection{Key Features}\label{index_autotoc_md2}
+
+\begin{DoxyItemize}
+\item Black–\+Scholes dynamics with Monte Carlo simulation (C++)
+\item Control variate technique to reduce variance (vanilla option benchmark)
+\item Open\+MP parallelization ({\ttfamily -\/fopenmp})
+\item Price uncertainty output (standard error + confidence interval on price)
+\item Two entry points\+:
+\begin{DoxyItemize}
+\item CLI executable producing CSV outputs
+\item Windows DLL exporting VBA-\/friendly functions for Excel
+\end{DoxyItemize}
+\item Excel dashboard\+:
+\begin{DoxyItemize}
+\item Run / Reset / Export CSV buttons
+\item Price(\+S0) and Delta(\+S0) charts
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Excel macros / buttons\+:
+\begin{DoxyItemize}
+\item Run → {\ttfamily Run\+Dashboard}
+\item Reset → {\ttfamily Reset\+Dashboard}
+\item Export CSV → {\ttfamily Lookback\+\_\+pricer.\+xlsm!\+Export\+CSV}
+\end{DoxyItemize}\hypertarget{index_autotoc_md3}{}\doxysection{Repository Structure}\label{index_autotoc_md3}
+
+\begin{DoxyItemize}
+\item {\ttfamily include/}
+\begin{DoxyItemize}
+\item core headers\+: Black-\/\+Scholes model, Monte Carlo engine, option/payoffs, \mbox{\hyperlink{structGreeks}{Greeks}}, DLL exports
+\end{DoxyItemize}
+\item {\ttfamily src/}
+\begin{DoxyItemize}
+\item implementation files ({\ttfamily \mbox{\hyperlink{BlackScholesModel_8cpp}{Black\+Scholes\+Model.\+cpp}}}, {\ttfamily \mbox{\hyperlink{MonteCarlo_8cpp}{Monte\+Carlo.\+cpp}}}, {\ttfamily \mbox{\hyperlink{Greeks_8cpp}{Greeks.\+cpp}}}, {\ttfamily \mbox{\hyperlink{VBAExports_8cpp}{VBAExports.\+cpp}}}, {\ttfamily \mbox{\hyperlink{main_8cpp}{main.\+cpp}}})
+\end{DoxyItemize}
+\item {\ttfamily excel/}
+\begin{DoxyItemize}
+\item {\ttfamily Lookback\+\_\+pricer.\+xlsm} (Excel/\+VBA interface)
+\end{DoxyItemize}
+\item {\ttfamily Doxyfile}
+\begin{DoxyItemize}
+\item Doxygen configuration (main page set to {\ttfamily README.\+md})
+\end{DoxyItemize}
+\item {\ttfamily Makefile}, {\ttfamily run.\+sh}
+\begin{DoxyItemize}
+\item optional / legacy scripts (WSL commands below are the recommended path)
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md4}{}\doxysection{How to Run}\label{index_autotoc_md4}
+Recommended workflow\+:
+\begin{DoxyItemize}
+\item Build either\+:
+\begin{DoxyItemize}
+\item the C++ executable to generate CSV outputs, or
+\item the Windows DLL to run from Excel/\+VBA
+\end{DoxyItemize}
+\item When using Excel, the DLL (and runtime dependencies if needed) must be placed in a Windows-\/readable path (e.\+g. {\ttfamily C\+:\textbackslash{}...}).
+\end{DoxyItemize}
+
+The exact build/run steps are listed in the Commands section below.\hypertarget{index_autotoc_md5}{}\doxysection{Excel interface (screenshots)}\label{index_autotoc_md5}
+\hypertarget{index_autotoc_md6}{}\doxysubsection{Excel dashboard (\+UI)}\label{index_autotoc_md6}
+
+
+Buttons / macros\+:
+\begin{DoxyItemize}
+\item {\bfseries{Run}} → {\ttfamily Run\+Dashboard}
+\item {\bfseries{Reset}} → {\ttfamily Reset\+Dashboard}
+\item {\bfseries{Export CSV}} → {\ttfamily Export\+CSV}
+\end{DoxyItemize}\hypertarget{index_autotoc_md7}{}\doxysubsection{Data sheet (tables used by charts)}\label{index_autotoc_md7}
+\hypertarget{index_autotoc_md8}{}\doxysection{Build \& Run Commands}\label{index_autotoc_md8}
+\DoxyHorRuler{0}
+\hypertarget{index_autotoc_md10}{}\doxysubsection{1) WSL commands}\label{index_autotoc_md10}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd /mnt/c/Projet\_Informatique\_M2QF}
+\DoxyCodeLine{pwd}
+\DoxyCodeLine{git status -\/sb}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md11}{}\doxysubsubsection{1.\+1 C++ executable (\+CSV)}\label{index_autotoc_md11}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{mkdir -\/p build/output}
+\DoxyCodeLine{rm -\/f build/lookback.exe}
+\DoxyCodeLine{}
+\DoxyCodeLine{g++ -\/std=c++17 -\/O3 -\/Iinclude -\/fopenmp \(\backslash\)}
+\DoxyCodeLine{  src/BlackScholesModel.cpp src/MonteCarlo.cpp src/Greeks.cpp src/main.cpp \(\backslash\)}
+\DoxyCodeLine{  -\/o build/lookback.exe}
+
+\end{DoxyCode}
+
+
+CALL (reduced parameters to limit runtime)\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./build/lookback.exe -\/-\/type CALL -\/-\/r 0.05 -\/-\/sigma 0.20 -\/-\/T 1.0 \(\backslash\)}
+\DoxyCodeLine{  -\/-\/steps 252 -\/-\/paths 50000 -\/-\/batch 4 -\/-\/seed 42 \(\backslash\)}
+\DoxyCodeLine{  -\/-\/Smin 50 -\/-\/Smax 150 -\/-\/dS 10 \(\backslash\)}
+\DoxyCodeLine{  -\/-\/out build/output/price\_greeks\_call.csv}
+\DoxyCodeLine{}
+\DoxyCodeLine{head -\/n 3 build/output/price\_greeks\_call.csv}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md12}{}\doxysubsubsection{1.\+2 Windows DLL (\+Excel/\+VBA)}\label{index_autotoc_md12}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{rm -\/f build/lookback.dll}
+\DoxyCodeLine{}
+\DoxyCodeLine{SRCS=\$(ls src/*.cpp | grep -\/v 'main.cpp')}
+\DoxyCodeLine{}
+\DoxyCodeLine{x86\_64-\/w64-\/mingw32-\/g++ -\/std=c++17 -\/O3 -\/Iinclude -\/fopenmp \(\backslash\)}
+\DoxyCodeLine{  -\/DLB\_BUILD\_DLL -\/shared \(\backslash\)}
+\DoxyCodeLine{  \$SRCS \(\backslash\)}
+\DoxyCodeLine{  -\/o build/lookback.dll}
+\DoxyCodeLine{}
+\DoxyCodeLine{file build/lookback.dll}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md13}{}\doxysubsubsection{1.\+3 Copy the DLL (and dependencies) into $<$tt$>$excel/$<$/tt$>$}\label{index_autotoc_md13}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{EXCEL\_DIR=/mnt/c/Projet\_Informatique\_M2QF/excel}
+\DoxyCodeLine{cp -\/f build/lookback.dll "{}\$EXCEL\_DIR/lookback.dll"{}}
+
+\end{DoxyCode}
+
+
+Required dependencies\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{x86\_64-\/w64-\/mingw32-\/objdump -\/p build/lookback.dll | grep "{}DLL Name"{}}
+
+\end{DoxyCode}
+
+
+Copy runtime DLLs\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{copy\_dll () \{}
+\DoxyCodeLine{  dll="{}\$1"{}}
+\DoxyCodeLine{  src="{}\$(x86\_64-\/w64-\/mingw32-\/g++ -\/print-\/file-\/name="{}\$dll"{})"{}}
+\DoxyCodeLine{  if [ "{}\$src"{} != "{}\$dll"{} ] \&\& [ -\/f "{}\$src"{} ]; then}
+\DoxyCodeLine{    cp -\/f "{}\$src"{} "{}\$EXCEL\_DIR/"{}}
+\DoxyCodeLine{    echo "{}Copied \$dll"{}}
+\DoxyCodeLine{  else}
+\DoxyCodeLine{    echo "{}WARNING: cannot locate \$dll"{}}
+\DoxyCodeLine{  fi}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{copy\_dll libgomp-\/1.dll}
+\DoxyCodeLine{copy\_dll libstdc++-\/6.dll}
+\DoxyCodeLine{copy\_dll libgcc\_s\_seh-\/1.dll}
+\DoxyCodeLine{copy\_dll libwinpthread-\/1.dll}
+
+\end{DoxyCode}
+
+
+On Windows\+:
+
+
+\begin{DoxyItemize}
+\item open {\ttfamily ...\textbackslash{}excel\textbackslash{}Lookback\+\_\+pricer.\+xlsm}
+\item enable macros
+\item use “\+Run / Refresh Charts”.
+\end{DoxyItemize}
+
+If Windows blocks files\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Unblock-\/File -\/Path "{}C:\(\backslash\)Projet\_Informatique\_M2QF\(\backslash\)excel"{}}
+
+\end{DoxyCode}
+
+
+\DoxyHorRuler{0}
+\hypertarget{index_autotoc_md15}{}\doxysubsection{2) Cleanup (no exe/dll)}\label{index_autotoc_md15}
+In WSL\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd /mnt/c/Projet\_Informatique\_M2QF}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# supprime le build entier (exe, dll, csv)}
+\DoxyCodeLine{rm -\/rf build}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# supprime la dll + dépendances copiées dans excel/}
+\DoxyCodeLine{rm -\/f excel/lookback.dll excel/libgomp-\/1.dll excel/libstdc++-\/6.dll excel/libgcc\_s\_seh-\/1.dll excel/libwinpthread-\/1.dll}
+\DoxyCodeLine{}
+\DoxyCodeLine{git status -\/sb}
+
+\end{DoxyCode}
+
+
+\DoxyHorRuler{0}
+\hypertarget{index_autotoc_md17}{}\doxysubsection{3) Summary}\label{index_autotoc_md17}
+
+\begin{DoxyItemize}
+\item Numerical computations (Monte-\/\+Carlo + control variate + \mbox{\hyperlink{structGreeks}{Greeks}}) are implemented in C++.
+\item Two entry points\+:
+\begin{DoxyItemize}
+\item C++ executable → writes CSV outputs
+\item Windows DLL → exported functions called by Excel/\+VBA
+\end{DoxyItemize}
+\item Excel provides the interface and visualization (Price(\+S0), Delta(\+S0), \mbox{\hyperlink{structGreeks}{Greeks}}).
+\end{DoxyItemize}
+
+\`{}\`{}\`{} 

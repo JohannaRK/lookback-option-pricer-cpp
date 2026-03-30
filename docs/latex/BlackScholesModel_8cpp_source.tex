@@ -1,0 +1,49 @@
+\hypertarget{BlackScholesModel_8cpp_source}{}\doxysection{Black\+Scholes\+Model.\+cpp}
+\label{BlackScholesModel_8cpp_source}\index{src/BlackScholesModel.cpp@{src/BlackScholesModel.cpp}}
+\mbox{\hyperlink{BlackScholesModel_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#ifndef BLACKSCHOLESMODEL\_CPP}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00002}\mbox{\hyperlink{BlackScholesModel_8cpp_aa8d32c9282c9566bb393cac22e319a8a}{00002}} \textcolor{preprocessor}{\#define BLACKSCHOLESMODEL\_CPP}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{BlackScholesModel_8hpp}{BlackScholesModel.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include <cmath>}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00006}\mbox{\hyperlink{classBlackScholesModel_a36ae6ef3de19dec2bde632a3d0ba9980}{00006}} std::vector<double> \mbox{\hyperlink{classBlackScholesModel_a36ae6ef3de19dec2bde632a3d0ba9980}{BlackScholesModel::simulate\_path}}(\textcolor{keywordtype}{double} T, \textcolor{keywordtype}{int} N,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00007}00007                                                      std::mt19937\& gen,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00008}00008                                                      std::normal\_distribution<double>\& dist)\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00009}00009 \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00010}00010     \textcolor{keywordflow}{if} (N <= 0)}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00011}00011     \{}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00012}00012         \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Number of steps N must be positive."{}});}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00013}00013     \}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00014}00014     std::vector<double> path(N + 1);}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00015}00015     \textcolor{keywordtype}{double} dt = T / N;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00016}00016     path[0] = initialPrice\_;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00017}00017     \textcolor{keyword}{const} \textcolor{keywordtype}{double} drift = (riskFreeRate\_ -\/ 0.5 * volatility\_ * volatility\_) * dt;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00018}00018     \textcolor{keyword}{const} \textcolor{keywordtype}{double} volDt = volatility\_ * std::sqrt(dt);}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00019}00019     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < N; ++i) }
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00020}00020     \{}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00021}00021         \textcolor{keywordtype}{double} Z = dist(gen);}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00022}00022         path[i + 1] = \mbox{\hyperlink{classBlackScholesModel_ab603b209443fcbb18edecd0a74bb4e34}{simulate\_step}}(path[i], Z, drift, volDt); \textcolor{comment}{// Could remove call to inline function for performance}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00023}00023     \}   }
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00024}00024     \textcolor{keywordflow}{return} path;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00025}00025 \}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00026}\mbox{\hyperlink{classBlackScholesModel_acd6fe10b4176b2d2bb1007fa19eefdd1}{00026}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classBlackScholesModel_acd6fe10b4176b2d2bb1007fa19eefdd1}{BlackScholesModel::simulate\_path\_into}}(}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00027}00027     std::vector<double>\& path,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00028}00028     \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00029}00029     \textcolor{keywordtype}{int} numSteps,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00030}00030     std::mt19937\& gen,}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00031}00031     std::normal\_distribution<double>\& dist}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00032}00032 )\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00033}00033 \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00034}00034     \textcolor{keywordtype}{double} dt = T / numSteps;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00035}00035     \textcolor{keywordtype}{double} drift = (riskFreeRate\_ -\/ 0.5 * volatility\_ * volatility\_) * dt;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00036}00036     \textcolor{keywordtype}{double} vol   = volatility\_ * std::sqrt(dt);}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00038}00038     path[0] = initialPrice\_;}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00040}00040     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i <= numSteps; ++i)}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00041}00041         path[i] = path[i-\/1] * std::exp(drift + vol * dist(gen));}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00042}00042 \}}
+\DoxyCodeLine{\Hypertarget{BlackScholesModel_8cpp_source_l00043}00043 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// BLACKSCHOLESMODEL\_CPP}}
+
+\end{DoxyCode}

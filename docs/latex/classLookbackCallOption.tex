@@ -1,0 +1,176 @@
+\hypertarget{classLookbackCallOption}{}\doxysection{Lookback\+Call\+Option Class Reference}
+\label{classLookbackCallOption}\index{LookbackCallOption@{LookbackCallOption}}
+
+
+{\ttfamily \#include $<$Lookback\+Option.\+hpp$>$}
+
+
+
+Inheritance diagram for Lookback\+Call\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classLookbackCallOption__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Lookback\+Call\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classLookbackCallOption__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classLookbackCallOption_aaccd67ae0ba6af69af6302871175bac2}{Lookback\+Call\+Option}} (const \mbox{\hyperlink{classLookbackFloatingCallPayoff}{Lookback\+Floating\+Call\+Payoff}} \&payoff, double maturity)
+\item 
+double \mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{compute\+Strike}} (const std\+::vector$<$ double $>$ \&path, int time\+Index) const override
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} $>$ \mbox{\hyperlink{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}{clone\+With\+Maturity}} (double newT) const override
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}{compute\+Path\+Strikes}} (const std\+::vector$<$ double $>$ \&path) const override
+\item 
+void \mbox{\hyperlink{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}{compute\+Path\+Strikes\+Into}} (const std\+::vector$<$ double $>$ \&path, std\+::vector$<$ double $>$ \&strikes) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00106}{106}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classLookbackCallOption_aaccd67ae0ba6af69af6302871175bac2}\label{classLookbackCallOption_aaccd67ae0ba6af69af6302871175bac2}} 
+\index{LookbackCallOption@{LookbackCallOption}!LookbackCallOption@{LookbackCallOption}}
+\index{LookbackCallOption@{LookbackCallOption}!LookbackCallOption@{LookbackCallOption}}
+\doxysubsubsection{\texorpdfstring{LookbackCallOption()}{LookbackCallOption()}}
+{\footnotesize\ttfamily Lookback\+Call\+Option\+::\+Lookback\+Call\+Option (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classLookbackFloatingCallPayoff}{Lookback\+Floating\+Call\+Payoff}} \&}]{payoff,  }\item[{double}]{maturity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00109}{109}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00110         : \mbox{\hyperlink{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}{LookbackOption}}(payoff, \textcolor{keyword}{true}, maturity) \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}\label{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}} 
+\index{LookbackCallOption@{LookbackCallOption}!cloneWithMaturity@{cloneWithMaturity}}
+\index{cloneWithMaturity@{cloneWithMaturity}!LookbackCallOption@{LookbackCallOption}}
+\doxysubsubsection{\texorpdfstring{cloneWithMaturity()}{cloneWithMaturity()}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} $>$ Lookback\+Call\+Option\+::clone\+With\+Maturity (\begin{DoxyParamCaption}\item[{double}]{newT }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}{Lookback\+Option}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00118}{118}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00119     \{}
+\DoxyCodeLine{00120         \textcolor{keywordflow}{return} std::make\_unique<LookbackCallOption>(}
+\DoxyCodeLine{00121             \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const }\mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}}\&\textcolor{keyword}{>}(\mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}),}
+\DoxyCodeLine{00122             newT}
+\DoxyCodeLine{00123         );}
+\DoxyCodeLine{00124     \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}\label{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}} 
+\index{LookbackCallOption@{LookbackCallOption}!computePathStrikes@{computePathStrikes}}
+\index{computePathStrikes@{computePathStrikes}!LookbackCallOption@{LookbackCallOption}}
+\doxysubsubsection{\texorpdfstring{computePathStrikes()}{computePathStrikes()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ Lookback\+Call\+Option\+::compute\+Path\+Strikes (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}{Lookback\+Option}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00126}{126}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00127     \{}
+\DoxyCodeLine{00128         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{00129 }
+\DoxyCodeLine{00130         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{00131         std::vector<double> strikes(M + 1);}
+\DoxyCodeLine{00132 }
+\DoxyCodeLine{00133         strikes[M] = path[M];}
+\DoxyCodeLine{00134         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{00135             strikes[i] = std::min(strikes[i + 1], path[i]);}
+\DoxyCodeLine{00136 }
+\DoxyCodeLine{00137         \textcolor{keywordflow}{return} strikes;}
+\DoxyCodeLine{00138     \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}\label{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}} 
+\index{LookbackCallOption@{LookbackCallOption}!computePathStrikesInto@{computePathStrikesInto}}
+\index{computePathStrikesInto@{computePathStrikesInto}!LookbackCallOption@{LookbackCallOption}}
+\doxysubsubsection{\texorpdfstring{computePathStrikesInto()}{computePathStrikesInto()}}
+{\footnotesize\ttfamily void Lookback\+Call\+Option\+::compute\+Path\+Strikes\+Into (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path,  }\item[{std\+::vector$<$ double $>$ \&}]{strikes }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{Lookback\+Option}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00140}{140}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00142     \{}
+\DoxyCodeLine{00143         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00144 }
+\DoxyCodeLine{00145         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{00146 }
+\DoxyCodeLine{00147         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(strikes.size()) != M + 1)}
+\DoxyCodeLine{00148             strikes.resize(M + 1);}
+\DoxyCodeLine{00149 }
+\DoxyCodeLine{00150         strikes[M] = path[M];}
+\DoxyCodeLine{00151         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{00152             strikes[i] = std::min(strikes[i + 1], path[i]);}
+\DoxyCodeLine{00153     \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}\label{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}} 
+\index{LookbackCallOption@{LookbackCallOption}!computeStrike@{computeStrike}}
+\index{computeStrike@{computeStrike}!LookbackCallOption@{LookbackCallOption}}
+\doxysubsubsection{\texorpdfstring{computeStrike()}{computeStrike()}}
+{\footnotesize\ttfamily double Lookback\+Call\+Option\+::compute\+Strike (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path,  }\item[{int}]{time\+Index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}{Lookback\+Option}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00113}{113}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00114     \{}
+\DoxyCodeLine{00115         \textcolor{keywordflow}{return} *std::min\_element(path.begin() + timeIndex, path.end());}
+\DoxyCodeLine{00116     \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{LookbackOption_8hpp}{Lookback\+Option.\+hpp}}\end{DoxyCompactItemize}

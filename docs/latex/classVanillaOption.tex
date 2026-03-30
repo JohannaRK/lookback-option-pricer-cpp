@@ -1,0 +1,172 @@
+\hypertarget{classVanillaOption}{}\doxysection{Vanilla\+Option Class Reference}
+\label{classVanillaOption}\index{VanillaOption@{VanillaOption}}
+
+
+{\ttfamily \#include $<$Lookback\+Option.\+hpp$>$}
+
+
+
+Inheritance diagram for Vanilla\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{classVanillaOption__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Vanilla\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=162pt]{classVanillaOption__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classVanillaOption_a484a8162b102e563e6ea2674a67f07a5}{Vanilla\+Option}} (const \mbox{\hyperlink{classPayoff}{Payoff}} \&payoff, double strike, double maturity)
+\item 
+double \mbox{\hyperlink{classVanillaOption_adf9825e74f4c688eb39d96275fc8e3e5}{get\+Maturity}} () const
+\item 
+void \mbox{\hyperlink{classVanillaOption_abae410e2065e49b12c373c677fbd5f52}{set\+Maturity}} (double T)
+\item 
+const \mbox{\hyperlink{classPayoff}{Payoff}} \& \mbox{\hyperlink{classVanillaOption_a177696cdd04a58d37b4f8530dbd656ad}{get\+Payoff}} () const
+\item 
+double \mbox{\hyperlink{classVanillaOption_ab8f6cac294ed08aa7a556f1ca0f9faee}{get\+Strike}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classPayoff}{Payoff}} \& \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\+\_\+}}
+\item 
+double \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\+\_\+}}
+\item 
+double \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00057}{57}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classVanillaOption_a484a8162b102e563e6ea2674a67f07a5}\label{classVanillaOption_a484a8162b102e563e6ea2674a67f07a5}} 
+\index{VanillaOption@{VanillaOption}!VanillaOption@{VanillaOption}}
+\index{VanillaOption@{VanillaOption}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{VanillaOption()}{VanillaOption()}}
+{\footnotesize\ttfamily Vanilla\+Option\+::\+Vanilla\+Option (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classPayoff}{Payoff}} \&}]{payoff,  }\item[{double}]{strike,  }\item[{double}]{maturity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00064}{64}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00065             : \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\_}}(payoff), \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\_}}(strike), \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}}(maturity) \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classVanillaOption_adf9825e74f4c688eb39d96275fc8e3e5}\label{classVanillaOption_adf9825e74f4c688eb39d96275fc8e3e5}} 
+\index{VanillaOption@{VanillaOption}!getMaturity@{getMaturity}}
+\index{getMaturity@{getMaturity}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{getMaturity()}{getMaturity()}}
+{\footnotesize\ttfamily double Vanilla\+Option\+::get\+Maturity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00066}{66}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00066 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVanillaOption_a177696cdd04a58d37b4f8530dbd656ad}\label{classVanillaOption_a177696cdd04a58d37b4f8530dbd656ad}} 
+\index{VanillaOption@{VanillaOption}!getPayoff@{getPayoff}}
+\index{getPayoff@{getPayoff}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{getPayoff()}{getPayoff()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classPayoff}{Payoff}} \& Vanilla\+Option\+::get\+Payoff (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00068}{68}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00068 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\_}}; \};    }
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVanillaOption_ab8f6cac294ed08aa7a556f1ca0f9faee}\label{classVanillaOption_ab8f6cac294ed08aa7a556f1ca0f9faee}} 
+\index{VanillaOption@{VanillaOption}!getStrike@{getStrike}}
+\index{getStrike@{getStrike}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{getStrike()}{getStrike()}}
+{\footnotesize\ttfamily double Vanilla\+Option\+::get\+Strike (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00069}{69}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00069 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\_}}; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVanillaOption_abae410e2065e49b12c373c677fbd5f52}\label{classVanillaOption_abae410e2065e49b12c373c677fbd5f52}} 
+\index{VanillaOption@{VanillaOption}!setMaturity@{setMaturity}}
+\index{setMaturity@{setMaturity}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{setMaturity()}{setMaturity()}}
+{\footnotesize\ttfamily void Vanilla\+Option\+::set\+Maturity (\begin{DoxyParamCaption}\item[{double}]{T }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00067}{67}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00067 \{ \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}} = T; \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}\label{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}} 
+\index{VanillaOption@{VanillaOption}!maturity\_@{maturity\_}}
+\index{maturity\_@{maturity\_}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{maturity\_}{maturity\_}}
+{\footnotesize\ttfamily double Vanilla\+Option\+::maturity\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00062}{62}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+\mbox{\Hypertarget{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}\label{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}} 
+\index{VanillaOption@{VanillaOption}!payoff\_@{payoff\_}}
+\index{payoff\_@{payoff\_}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{payoff\_}{payoff\_}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classPayoff}{Payoff}}\& Vanilla\+Option\+::payoff\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00060}{60}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+\mbox{\Hypertarget{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}\label{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}} 
+\index{VanillaOption@{VanillaOption}!strike\_@{strike\_}}
+\index{strike\_@{strike\_}!VanillaOption@{VanillaOption}}
+\doxysubsubsection{\texorpdfstring{strike\_}{strike\_}}
+{\footnotesize\ttfamily double Vanilla\+Option\+::strike\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00061}{61}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{LookbackOption_8hpp}{Lookback\+Option.\+hpp}}\end{DoxyCompactItemize}

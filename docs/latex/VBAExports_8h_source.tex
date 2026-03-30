@@ -1,0 +1,84 @@
+\hypertarget{VBAExports_8h_source}{}\doxysection{VBAExports.\+h}
+\label{VBAExports_8h_source}\index{include/VBAExports.h@{include/VBAExports.h}}
+\mbox{\hyperlink{VBAExports_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef VBA\_EXPORTS\_H}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00002}00002 \textcolor{preprocessor}{\#define VBA\_EXPORTS\_H}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00004}00004 \textcolor{comment}{// A VBA-\/friendly C API that wraps the C++ pricer.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00005}00005 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00006}00006 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00007}00007 \textcolor{comment}{// Notes:}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00008}00008 \textcolor{comment}{// -\/ Excel/VBA (Windows) expects a .dll. The exports below are written to also}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00009}00009 \textcolor{comment}{//   compile on Linux/macOS as a shared library, but Excel on Windows cannot load}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00010}00010 \textcolor{comment}{//   .so/.dylib.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00011}00011 \textcolor{comment}{// -\/ Use extern "{}C"{} to avoid C++ name mangling.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00012}00012 \textcolor{comment}{// -\/ Use \_\_stdcall for VBA friendliness (ignored on Win64 but OK to keep).}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00014}00014 \textcolor{preprocessor}{\#if defined(\_WIN32) || defined(\_WIN64)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00015}00015 \textcolor{preprocessor}{  \#define LB\_CALLCONV \_\_stdcall}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00016}00016 \textcolor{preprocessor}{  \#if defined(LB\_BUILD\_DLL)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00017}00017 \textcolor{preprocessor}{    \#define LB\_API extern "{}C"{}} \_\_declspec(dllexport)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00018}00018 \textcolor{preprocessor}{  \#else}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00019}00019 \textcolor{preprocessor}{    \#define LB\_API extern "{}C"{}} \_\_declspec(dllimport)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00020}00020 \textcolor{preprocessor}{  \#endif}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00021}00021 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00022}\mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{00022}} \textcolor{preprocessor}{  \#define LB\_CALLCONV}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00023}00023 \textcolor{preprocessor}{  \#if defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00024}00024 \textcolor{preprocessor}{    \#define LB\_API extern "{}C"{}} \_\_attribute\_\_((visibility("{}default"{})))}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00025}00025 \textcolor{preprocessor}{  \#else}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00026}\mbox{\hyperlink{VBAExports_8h_a3c82346e55f551b0fb7c2ca32b4478ae}{00026}} \textcolor{preprocessor}{    \#define LB\_API extern "{}C"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00027}00027 \textcolor{preprocessor}{  \#endif}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00028}00028 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00030}00030 \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00031}00031 \textcolor{comment}{// Output layout for out10 (10 doubles)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00032}00032 \textcolor{comment}{//   [0] price}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00033}00033 \textcolor{comment}{//   [1] delta}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00034}00034 \textcolor{comment}{//   [2] gamma}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00035}00035 \textcolor{comment}{//   [3] vega}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00036}00036 \textcolor{comment}{//   [4] rho}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00037}00037 \textcolor{comment}{//   [5] theta}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00038}00038 \textcolor{comment}{//   [6] priceStdError}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00039}00039 \textcolor{comment}{//   [7] priceCILower}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00040}00040 \textcolor{comment}{//   [8] priceCIUpper}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00041}00041 \textcolor{comment}{//   [9] reserved (0)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00042}00042 \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00043}00043 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00044}00044 \mbox{\hyperlink{VBAExports_8h_a3c82346e55f551b0fb7c2ca32b4478ae}{LB\_API}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8h_ac4d5f836b4da0d599c91e5c0ae7f80e2}{Lookback\_CallAll}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00045}00045     \textcolor{keywordtype}{double} S0, \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00046}00046     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00047}00047     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00048}00048     \textcolor{keywordtype}{double}* out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00050}00050 \mbox{\hyperlink{VBAExports_8h_a3c82346e55f551b0fb7c2ca32b4478ae}{LB\_API}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8h_afb374f239f7dae00432b7eaee4210860}{Lookback\_PutAll}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00051}00051     \textcolor{keywordtype}{double} S0, \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00052}00052     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00053}00053     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00054}00054     \textcolor{keywordtype}{double}* out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00055}00055 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00056}00056 \textcolor{comment}{// Convenience: compute curves for charts in ONE call (faster than 30 VBA calls)}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00057}00057 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00058}00058 \textcolor{comment}{// -\/ spots[i]  = spotStart + i * spotStep}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00059}00059 \textcolor{comment}{// -\/ prices[i] = Lookback price at spots[i]}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00060}00060 \textcolor{comment}{// -\/ deltas[i] = Lookback delta at spots[i]}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00061}00061 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00062}00062 \textcolor{comment}{// Arrays are assumed contiguous and 0-\/based (use ReDim arr(0 To n-\/1) in VBA).}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00064}00064 \mbox{\hyperlink{VBAExports_8h_a3c82346e55f551b0fb7c2ca32b4478ae}{LB\_API}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8h_ae62b8bd3a8669333469969b571c66216}{Lookback\_CallCurve}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00065}00065     \textcolor{keywordtype}{double} spotStart, \textcolor{keywordtype}{double} spotStep, \textcolor{keywordtype}{int} nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00066}00066     \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00067}00067     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00068}00068     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00069}00069     \textcolor{keywordtype}{double}* spots, \textcolor{keywordtype}{double}* prices, \textcolor{keywordtype}{double}* deltas);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00071}00071 \mbox{\hyperlink{VBAExports_8h_a3c82346e55f551b0fb7c2ca32b4478ae}{LB\_API}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8h_a0472594270323535d6906077a756b095}{Lookback\_PutCurve}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00072}00072     \textcolor{keywordtype}{double} spotStart, \textcolor{keywordtype}{double} spotStep, \textcolor{keywordtype}{int} nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00073}00073     \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00074}00074     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00075}00075     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00076}00076     \textcolor{keywordtype}{double}* spots, \textcolor{keywordtype}{double}* prices, \textcolor{keywordtype}{double}* deltas);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8h_source_l00078}00078 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// VBA\_EXPORTS\_H}}
+
+\end{DoxyCode}

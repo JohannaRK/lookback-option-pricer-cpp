@@ -1,0 +1,117 @@
+\hypertarget{main_8cpp_source}{}\doxysection{main.\+cpp}
+\label{main_8cpp_source}\index{src/main.cpp@{src/main.cpp}}
+\mbox{\hyperlink{main_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <fstream>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include <iomanip>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00006}00006 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00008}00008 \textcolor{comment}{// tuoi header}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00009}00009 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{BlackScholesModel_8hpp}{BlackScholesModel.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00010}00010 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{MonteCarlo_8hpp}{MonteCarlo.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00011}00011 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{LookbackOption_8hpp}{LookbackOption.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00012}00012 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{Greeks_8hpp}{Greeks.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00014}00014 \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00015}00015 \textcolor{comment}{// CLI helper}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00016}00016 \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00017}\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{00017}} \textcolor{keyword}{static} std::string \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv,}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00018}00018                           \textcolor{keyword}{const} std::string\& key,}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00019}00019                           \textcolor{keyword}{const} std::string\& def = \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00020}00020 \{}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00021}00021     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i + 1 < argc; ++i)}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00022}00022         \textcolor{keywordflow}{if} (std::string(argv[i]) == key)}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00023}00023             \textcolor{keywordflow}{return} std::string(argv[i + 1]);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00024}00024     \textcolor{keywordflow}{return} def;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00025}00025 \}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00026}00026 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00027}\mbox{\hyperlink{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{00027}} \textcolor{keywordtype}{int} \mbox{\hyperlink{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv)}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00028}00028 \{}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00029}00029     \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00030}00030         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00031}00031         \textcolor{comment}{// 0) Parse args}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00032}00032         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00033}00033         \textcolor{keyword}{const} \textcolor{keywordtype}{double} r     = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/r"{}}, \textcolor{stringliteral}{"{}0.05"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00034}00034         \textcolor{keyword}{const} \textcolor{keywordtype}{double} sigma = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/sigma"{}}, \textcolor{stringliteral}{"{}0.20"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00035}00035         \textcolor{keyword}{const} \textcolor{keywordtype}{double} T     = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/T"{}}, \textcolor{stringliteral}{"{}1.0"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00036}00036         \textcolor{keyword}{const} \textcolor{keywordtype}{double} t0    = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/t0"{}}, \textcolor{stringliteral}{"{}0.0"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00038}00038         \textcolor{keyword}{const} \textcolor{keywordtype}{int} numPaths  = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/paths"{}}, \textcolor{stringliteral}{"{}200000"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00039}00039         \textcolor{keyword}{const} \textcolor{keywordtype}{int} numSteps  = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/steps"{}}, \textcolor{stringliteral}{"{}252"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00040}00040         \textcolor{keyword}{const} \textcolor{keywordtype}{int} batchSize = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/batch"{}}, \textcolor{stringliteral}{"{}4"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00041}00041         \textcolor{keyword}{const} \textcolor{keywordtype}{int} seed      = std::stoi(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/seed"{}}, \textcolor{stringliteral}{"{}42"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00043}00043         \textcolor{keyword}{const} \textcolor{keywordtype}{double} Smin = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/Smin"{}}, \textcolor{stringliteral}{"{}50"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00044}00044         \textcolor{keyword}{const} \textcolor{keywordtype}{double} Smax = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/Smax"{}}, \textcolor{stringliteral}{"{}150"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00045}00045         \textcolor{keyword}{const} \textcolor{keywordtype}{double} dS   = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/dS"{}}, \textcolor{stringliteral}{"{}5"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00047}00047         \textcolor{keyword}{const} std::string type   = \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/type"{}}, \textcolor{stringliteral}{"{}CALL"{}});}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00048}00048         \textcolor{keyword}{const} std::string outCsv = \mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/out"{}}, \textcolor{stringliteral}{"{}price\_greeks.csv"{}});}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00050}00050         \textcolor{comment}{// NEW: z for confidence interval (default 95\%)}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00051}00051         \textcolor{keyword}{const} \textcolor{keywordtype}{double} z = std::stod(\mbox{\hyperlink{main_8cpp_a2cdc86863f4165429bdc7c1bd297b409}{getArg}}(argc, argv, \textcolor{stringliteral}{"{}-\/-\/z"{}}, \textcolor{stringliteral}{"{}1.96"{}}));}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00053}00053         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00054}00054         \textcolor{comment}{// 1) Build option}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00055}00055         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00056}00056         \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} lbCallPayoff;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00057}00057         \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}}  lbPutPayoff;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00059}00059         std::unique\_ptr<LookbackOption> option;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00060}00060         \textcolor{keywordflow}{if} (type == \textcolor{stringliteral}{"{}CALL"{}})}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00061}00061             option = std::make\_unique<LookbackCallOption>(lbCallPayoff, T);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00062}00062         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (type == \textcolor{stringliteral}{"{}PUT"{}})}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00063}00063             option = std::make\_unique<LookbackPutOption>(lbPutPayoff, T);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00064}00064         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00065}00065             \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown -\/-\/type (use CALL or PUT)"{}});}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00067}00067         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00068}00068         \textcolor{comment}{// 2) Output}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00069}00069         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00070}00070         std::ofstream file(outCsv);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00071}00071         \textcolor{keywordflow}{if} (!file)}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00072}00072             \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Cannot open output file: "{}} + outCsv);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00073}00073 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00074}00074         file << std::fixed << std::setprecision(10);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00075}00075 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00076}00076         \textcolor{comment}{// UPDATED: include MC uncertainty for price}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00077}00077         file << \textcolor{stringliteral}{"{}S0,Price,PriceStdError,PriceCILower,PriceCIUpper,Delta,Gamma,Vega,Rho,Theta\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00079}00079         \mbox{\hyperlink{classGreeksCalculator}{GreeksCalculator}} greeksCalc;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00080}00080 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00081}00081         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00082}00082         \textcolor{comment}{// 3) Grid loop}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00083}00083         \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00084}00084         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{double} S0 = Smin; S0 <= Smax + 1e-\/12; S0 += dS)}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00085}00085         \{}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00086}00086             \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00087}00087             \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcBase(model, numPaths, numSteps, batchSize, seed);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00088}00088 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00089}00089             \textcolor{comment}{// UPDATED: computeGreeks takes z}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00090}00090             \textcolor{keyword}{const} \mbox{\hyperlink{structGreeks}{Greeks}} g = greeksCalc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(*option, mcBase, t0, z);}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00091}00091 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00092}00092             file << S0 << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00093}00093                  << g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00094}00094                  << g.\mbox{\hyperlink{structGreeks_a48d08e2f22d340698c2946931cea6a7c}{priceStdError}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00095}00095                  << g.\mbox{\hyperlink{structGreeks_a6f0c04fcba6048715d2c0dff20ceb844}{priceCILower}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00096}00096                  << g.\mbox{\hyperlink{structGreeks_a90c8347172d1640e136d6e8dda8b94c6}{priceCIUpper}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00097}00097                  << g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00098}00098                  << g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}} << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00099}00099                  << g.\mbox{\hyperlink{structGreeks_a87709cf35763c458f36a6935f7d7ce25}{vega}}  << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00100}00100                  << g.\mbox{\hyperlink{structGreeks_afaa454ff183cfa3d58902d49e4f363db}{rho}}   << \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00101}00101                  << g.\mbox{\hyperlink{structGreeks_a82fcb8b4f18e8afc91ab23df69ae6f17}{theta}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00102}00102         \}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00103}00103 }
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00104}00104         std::cout << \textcolor{stringliteral}{"{}Wrote CSV: "{}} << outCsv << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00105}00105         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00106}00106     \}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00107}00107     \textcolor{keywordflow}{catch} (\textcolor{keyword}{const} std::exception\& e) \{}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00108}00108         std::cerr << \textcolor{stringliteral}{"{}ERROR: "{}} << e.what() << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00109}00109         \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00110}00110     \}}
+\DoxyCodeLine{\Hypertarget{main_8cpp_source_l00111}00111 \}}
+
+\end{DoxyCode}

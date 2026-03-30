@@ -1,0 +1,162 @@
+\hypertarget{MonteCarlo_8cpp_source}{}\doxysection{Monte\+Carlo.\+cpp}
+\label{MonteCarlo_8cpp_source}\index{src/MonteCarlo.cpp@{src/MonteCarlo.cpp}}
+\mbox{\hyperlink{MonteCarlo_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#ifndef MONTECARLO\_CPP}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00002}\mbox{\hyperlink{MonteCarlo_8cpp_ac200856b13d0ceff3da31e4bebf0d1c4}{00002}} \textcolor{preprocessor}{\#define MONTECARLO\_CPP}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{MonteCarlo_8hpp}{MonteCarlo.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include <omp.h>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00006}00006 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00007}00007 \textcolor{preprocessor}{\#include <iomanip>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00008}00008 \textcolor{preprocessor}{\#include <algorithm>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00009}00009 \textcolor{preprocessor}{\#include <cmath>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00010}00010 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00011}00011 \textcolor{preprocessor}{\#include <random>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00012}00012 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00014}00014 \textcolor{comment}{// CHANGED SIGNATURE: return MCResult + add z parameter}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00015}00015 \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MonteCarloSimulator::MCResult}}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00016}\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{00016}} \mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{MonteCarloSimulator::simulateOptionPriceControlVariate\_t0}}(\textcolor{keyword}{const} \mbox{\hyperlink{classLookbackOption}{LookbackOption}}\& option, \textcolor{keywordtype}{double} t0, \textcolor{keywordtype}{double} z)\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00017}00017 \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00018}00018     \textcolor{keyword}{const} \textcolor{keywordtype}{int} nThreads = omp\_get\_max\_threads();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00020}00020     \textcolor{comment}{// Thread-\/local PRNGs}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00021}00021     std::vector<std::mt19937> generators(nThreads);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00022}00022     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} tid = 0; tid < nThreads; ++tid)}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00023}00023         generators[tid] = std::mt19937(seed + tid * 1000003);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00025}00025     \textcolor{comment}{// Per-\/thread global accumulators (written once after the loop)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00026}00026     std::vector<double> threadSumX(nThreads, 0.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00027}00027     std::vector<double> threadSumY(nThreads, 0.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00028}00028     std::vector<double> threadSumY2(nThreads, 0.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00029}00029     std::vector<double> threadSumXY(nThreads, 0.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00031}00031     \textcolor{comment}{// ADDED: needed for Var(X)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00032}00032     std::vector<double> threadSumX2(nThreads, 0.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00033}00033 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00034}00034     \textcolor{comment}{// Vanilla payoff (polymorphic)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00035}00035     std::unique\_ptr<Payoff> vanillaPayoff;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00036}00036     \textcolor{keywordflow}{if} (option.\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}()) vanillaPayoff = std::make\_unique<VanillaCallPayoff>();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00037}00037     \textcolor{keywordflow}{else}                vanillaPayoff = std::make\_unique<VanillaPutPayoff>();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00039}00039     \textcolor{comment}{// Cache lookback payoff (virtual dispatch)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00040}00040     \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& lbPayoff = option.\mbox{\hyperlink{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}{getPayoff}}();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00042}00042     \textcolor{comment}{// Model / option parameters}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00043}00043     \textcolor{keyword}{const} \textcolor{keywordtype}{double} r = model\_.\mbox{\hyperlink{classBlackScholesModel_a9889f556ac89d636583b55be9de25aba}{getRiskFreeRate}}();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00044}00044     \textcolor{keyword}{const} \textcolor{keywordtype}{double} T = option.\mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{getMaturity}}();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00046}00046     \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0 = model\_.\mbox{\hyperlink{classBlackScholesModel_ab2677940e3cfbb91f75b6c75af41e214}{getInitialPrice}}();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00047}00047     \textcolor{keyword}{const} \textcolor{keywordtype}{double} K  = S0 * std::exp(r * (T -\/ t0));}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00048}00048 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00049}00049     \textcolor{keyword}{const} \textcolor{keywordtype}{double} C0 = option.\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}()}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00050}00050         ? model\_.\mbox{\hyperlink{classBlackScholesModel_a4a4c78dd2b90b7f5c65a1ce840f94e71}{priceCallBS}}(S0, K, T -\/ t0)}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00051}00051         : model\_.\mbox{\hyperlink{classBlackScholesModel_a99f117ead2608f4cf54bd1fa3801e9be}{pricePutBS}}(S0, K, T -\/ t0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00053}00053     \textcolor{keyword}{const} \textcolor{keywordtype}{double} disc = std::exp(-\/r * (T -\/ t0));}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00055}00055     \textcolor{keyword}{const} \textcolor{keywordtype}{int} N  = numPaths\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00056}00056     \textcolor{keyword}{const} \textcolor{keywordtype}{int} bs = batchSize\_;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00057}00057 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00058}00058 \textcolor{preprocessor}{    \#pragma omp parallel}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00059}00059     \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00060}00060         \textcolor{keyword}{const} \textcolor{keywordtype}{int} tid = omp\_get\_thread\_num();}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00061}00061         \textcolor{keyword}{auto}\& gen = generators[tid];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00062}00062         std::normal\_distribution<double> dist(0.0, 1.0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00064}00064         \textcolor{comment}{// Thread-\/local preallocation (avoid reallocations/resizes)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00065}00065         std::vector<double> path(numSteps\_ + 1);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00066}00066         std::vector<double> strikes(numSteps\_ + 1);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00068}00068         \textcolor{keywordtype}{double} localSumX  = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00069}00069         \textcolor{keywordtype}{double} localSumY  = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00070}00070         \textcolor{keywordtype}{double} localSumY2 = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00071}00071         \textcolor{keywordtype}{double} localSumXY = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00072}00072 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00073}00073         \textcolor{comment}{// ADDED: local X\string^2 accumulator}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00074}00074         \textcolor{keywordtype}{double} localSumX2 = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00075}00075 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00076}00076 \textcolor{preprocessor}{        \#pragma omp for schedule(static)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00077}00077         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < N; i += bs)}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00078}00078         \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00079}00079             \textcolor{keyword}{const} \textcolor{keywordtype}{int} end = std::min(i + bs, N);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00080}00080             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = i; j < end; ++j)}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00081}00081             \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00082}00082                 model\_.\mbox{\hyperlink{classBlackScholesModel_acd6fe10b4176b2d2bb1007fa19eefdd1}{simulate\_path\_into}}(path, T, numSteps\_, gen, dist);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00083}00083                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} ST = path[numSteps\_];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00084}00084 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00085}00085                 option.\mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{computePathStrikesInto}}(path, strikes);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00086}00086                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} strike0 = strikes[0];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00087}00087 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00088}00088                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} X = disc * lbPayoff(ST, strike0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00089}00089                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} Y = disc * (*vanillaPayoff)(ST, K);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00090}00090 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00091}00091                 localSumX  += X;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00092}00092                 \textcolor{comment}{// ADDED: accumulate X\string^2}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00093}00093                 localSumX2 += X * X;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00094}00094 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00095}00095                 localSumY  += Y;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00096}00096                 localSumY2 += Y * Y;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00097}00097                 localSumXY += X * Y;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00098}00098             \}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00099}00099         \}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00100}00100 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00101}00101         \textcolor{comment}{// Single writeback per thread}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00102}00102         threadSumX[tid]  += localSumX;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00103}00103         \textcolor{comment}{// ADDED: writeback X\string^2}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00104}00104         threadSumX2[tid] += localSumX2;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00105}00105 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00106}00106         threadSumY[tid]  += localSumY;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00107}00107         threadSumY2[tid] += localSumY2;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00108}00108         threadSumXY[tid] += localSumXY;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00109}00109     \}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00110}00110 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00111}00111     \textcolor{comment}{// Reduction across threads}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00112}00112     \textcolor{keywordtype}{double} sumX = 0.0, sumY = 0.0, sumY2 = 0.0, sumXY = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00113}00113     \textcolor{comment}{// ADDED: reduce X\string^2}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00114}00114     \textcolor{keywordtype}{double} sumX2 = 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00115}00115 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00116}00116     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} tid = 0; tid < nThreads; ++tid) \{}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00117}00117         sumX  += threadSumX[tid];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00118}00118         sumX2 += threadSumX2[tid];   \textcolor{comment}{// ADDED}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00119}00119         sumY  += threadSumY[tid];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00120}00120         sumY2 += threadSumY2[tid];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00121}00121         sumXY += threadSumXY[tid];}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00122}00122     \}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00123}00123 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00124}00124     \textcolor{keyword}{const} \textcolor{keywordtype}{double} invN = 1.0 / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(numPaths\_);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00125}00125     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanX  = sumX  * invN;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00126}00126     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanY  = sumY  * invN;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00127}00127     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanY2 = sumY2 * invN;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00128}00128     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanXY = sumXY * invN;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00129}00129 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00130}00130     \textcolor{comment}{// ADDED: mean of X\string^2 and Var(X)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00131}00131     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanX2 = sumX2 * invN;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00132}00132 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00133}00133     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varY  = meanY2 -\/ meanY * meanY;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00134}00134     \textcolor{keyword}{const} \textcolor{keywordtype}{double} covXY = meanXY -\/ meanX * meanY;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00135}00135 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00136}00136     \textcolor{comment}{// ADDED: Var(X)}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00137}00137     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varX  = meanX2 -\/ meanX * meanX;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00138}00138 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00139}00139     \textcolor{keyword}{const} \textcolor{keywordtype}{double} alpha = (varY > 0.0) ? (covXY / varY) : 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00140}00140 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00141}00141     \textcolor{comment}{// CHANGED: compute price then CI}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00142}00142     \textcolor{keyword}{const} \textcolor{keywordtype}{double} price = meanX -\/ alpha * (meanY -\/ C0);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00143}00143 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00144}00144     \textcolor{comment}{// Plug-\/in variance of Z = X -\/ alpha*(Y -\/ C0) with alpha treated as fixed}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00145}00145     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varZ = varX + alpha * alpha * varY -\/ 2.0 * alpha * covXY;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00146}00146 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00147}00147     \textcolor{keyword}{const} \textcolor{keywordtype}{double} N\_d = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(numPaths\_);}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00148}00148     \textcolor{keyword}{const} \textcolor{keywordtype}{double} stdError = (varZ > 0.0) ? std::sqrt(varZ / N\_d) : 0.0;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00149}00149 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00150}00150     \textcolor{keyword}{const} \textcolor{keywordtype}{double} ciLower = price -\/ z * stdError;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00151}00151     \textcolor{keyword}{const} \textcolor{keywordtype}{double} ciUpper = price + z * stdError;}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00152}00152 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00153}00153     \textcolor{keywordflow}{return} \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MCResult}}\{price, stdError, ciLower, ciUpper\};}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00154}00154 \}}
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{MonteCarlo_8cpp_source_l00156}00156 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

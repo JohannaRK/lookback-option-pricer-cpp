@@ -1,0 +1,312 @@
+\hypertarget{classMonteCarloSimulator}{}\doxysection{Monte\+Carlo\+Simulator Class Reference}
+\label{classMonteCarloSimulator}\index{MonteCarloSimulator@{MonteCarloSimulator}}
+
+
+{\ttfamily \#include $<$Monte\+Carlo.\+hpp$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MCResult}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMonteCarloSimulator_a899f1482da4e10d135fefbfc7ae37c5f}{Monte\+Carlo\+Simulator}} (const \mbox{\hyperlink{classBlackScholesModel}{Black\+Scholes\+Model}} \&model, int num\+Paths, int num\+Steps, int batch\+Size=1, unsigned int seed=42)
+\item 
+\mbox{\hyperlink{classMonteCarloSimulator}{Monte\+Carlo\+Simulator}} \& \mbox{\hyperlink{classMonteCarloSimulator_add1774a1a0d5f428cfbbca4c964c4c8b}{set\+Batch\+Size}} (int batch\+Size)
+\item 
+const \mbox{\hyperlink{classBlackScholesModel}{Black\+Scholes\+Model}} \& \mbox{\hyperlink{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}{get\+Model}} () const
+\item 
+int \mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{get\+Num\+Paths}} () const
+\item 
+int \mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{get\+Num\+Steps}} () const
+\item 
+int \mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{get\+Batch\+Size}} () const
+\item 
+unsigned int \mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{get\+Seed}} () const
+\item 
+\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{MCResult}} \mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulate\+Option\+Price\+Control\+Variate\+\_\+t0}} (const \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} \&option, double t0, double z=1.\+96) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00007}{7}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMonteCarloSimulator_a899f1482da4e10d135fefbfc7ae37c5f}\label{classMonteCarloSimulator_a899f1482da4e10d135fefbfc7ae37c5f}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!MonteCarloSimulator@{MonteCarloSimulator}}
+\index{MonteCarloSimulator@{MonteCarloSimulator}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{MonteCarloSimulator()}{MonteCarloSimulator()}}
+{\footnotesize\ttfamily Monte\+Carlo\+Simulator\+::\+Monte\+Carlo\+Simulator (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classBlackScholesModel}{Black\+Scholes\+Model}} \&}]{model,  }\item[{int}]{num\+Paths,  }\item[{int}]{num\+Steps,  }\item[{int}]{batch\+Size = {\ttfamily 1},  }\item[{unsigned int}]{seed = {\ttfamily 42} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00016}{16}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00016                                                                                                                                    : }
+\DoxyCodeLine{00017                             model\_(model), numPaths\_(numPaths), numSteps\_(numSteps), batchSize\_(batchSize), seed(seed) \{\};}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}\label{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!getBatchSize@{getBatchSize}}
+\index{getBatchSize@{getBatchSize}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{getBatchSize()}{getBatchSize()}}
+{\footnotesize\ttfamily int Monte\+Carlo\+Simulator\+::get\+Batch\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00028}{28}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028 \{ \textcolor{keywordflow}{return} batchSize\_; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}\label{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!getModel@{getModel}}
+\index{getModel@{getModel}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{getModel()}{getModel()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classBlackScholesModel}{Black\+Scholes\+Model}} \& Monte\+Carlo\+Simulator\+::get\+Model (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00025}{25}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00025 \{ \textcolor{keywordflow}{return} model\_; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}\label{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!getNumPaths@{getNumPaths}}
+\index{getNumPaths@{getNumPaths}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{getNumPaths()}{getNumPaths()}}
+{\footnotesize\ttfamily int Monte\+Carlo\+Simulator\+::get\+Num\+Paths (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00026}{26}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00026 \{ \textcolor{keywordflow}{return} numPaths\_; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}\label{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!getNumSteps@{getNumSteps}}
+\index{getNumSteps@{getNumSteps}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{getNumSteps()}{getNumSteps()}}
+{\footnotesize\ttfamily int Monte\+Carlo\+Simulator\+::get\+Num\+Steps (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00027}{27}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00027 \{ \textcolor{keywordflow}{return} numSteps\_; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}\label{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!getSeed@{getSeed}}
+\index{getSeed@{getSeed}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{getSeed()}{getSeed()}}
+{\footnotesize\ttfamily unsigned int Monte\+Carlo\+Simulator\+::get\+Seed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00029}{29}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00029 \{ \textcolor{keywordflow}{return} seed; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_add1774a1a0d5f428cfbbca4c964c4c8b}\label{classMonteCarloSimulator_add1774a1a0d5f428cfbbca4c964c4c8b}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!setBatchSize@{setBatchSize}}
+\index{setBatchSize@{setBatchSize}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{setBatchSize()}{setBatchSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMonteCarloSimulator}{Monte\+Carlo\+Simulator}} \& Monte\+Carlo\+Simulator\+::set\+Batch\+Size (\begin{DoxyParamCaption}\item[{int}]{batch\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8hpp_source_l00018}{18}} of file \mbox{\hyperlink{MonteCarlo_8hpp_source}{Monte\+Carlo.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00019         \{ }
+\DoxyCodeLine{00020             \textcolor{keywordflow}{if} (batchSize <= 0)}
+\DoxyCodeLine{00021                 \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}batchSize must be > 0"{}});}
+\DoxyCodeLine{00022             batchSize\_ = batchSize; }
+\DoxyCodeLine{00023             \textcolor{keywordflow}{return} *\textcolor{keyword}{this}; }
+\DoxyCodeLine{00024         \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}\label{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}} 
+\index{MonteCarloSimulator@{MonteCarloSimulator}!simulateOptionPriceControlVariate\_t0@{simulateOptionPriceControlVariate\_t0}}
+\index{simulateOptionPriceControlVariate\_t0@{simulateOptionPriceControlVariate\_t0}!MonteCarloSimulator@{MonteCarloSimulator}}
+\doxysubsubsection{\texorpdfstring{simulateOptionPriceControlVariate\_t0()}{simulateOptionPriceControlVariate\_t0()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult}{Monte\+Carlo\+Simulator\+::\+MCResult}} Monte\+Carlo\+Simulator\+::simulate\+Option\+Price\+Control\+Variate\+\_\+t0 (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} \&}]{option,  }\item[{double}]{t0,  }\item[{double}]{z = {\ttfamily 1.96} }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{MonteCarlo_8cpp_source_l00016}{16}} of file \mbox{\hyperlink{MonteCarlo_8cpp_source}{Monte\+Carlo.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00017 \{}
+\DoxyCodeLine{00018     \textcolor{keyword}{const} \textcolor{keywordtype}{int} nThreads = omp\_get\_max\_threads();}
+\DoxyCodeLine{00019 }
+\DoxyCodeLine{00020     \textcolor{comment}{// Thread-\/local PRNGs}}
+\DoxyCodeLine{00021     std::vector<std::mt19937> generators(nThreads);}
+\DoxyCodeLine{00022     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} tid = 0; tid < nThreads; ++tid)}
+\DoxyCodeLine{00023         generators[tid] = std::mt19937(seed + tid * 1000003);}
+\DoxyCodeLine{00024 }
+\DoxyCodeLine{00025     \textcolor{comment}{// Per-\/thread global accumulators (written once after the loop)}}
+\DoxyCodeLine{00026     std::vector<double> threadSumX(nThreads, 0.0);}
+\DoxyCodeLine{00027     std::vector<double> threadSumY(nThreads, 0.0);}
+\DoxyCodeLine{00028     std::vector<double> threadSumY2(nThreads, 0.0);}
+\DoxyCodeLine{00029     std::vector<double> threadSumXY(nThreads, 0.0);}
+\DoxyCodeLine{00030 }
+\DoxyCodeLine{00031     \textcolor{comment}{// ADDED: needed for Var(X)}}
+\DoxyCodeLine{00032     std::vector<double> threadSumX2(nThreads, 0.0);}
+\DoxyCodeLine{00033 }
+\DoxyCodeLine{00034     \textcolor{comment}{// Vanilla payoff (polymorphic)}}
+\DoxyCodeLine{00035     std::unique\_ptr<Payoff> vanillaPayoff;}
+\DoxyCodeLine{00036     \textcolor{keywordflow}{if} (option.\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}()) vanillaPayoff = std::make\_unique<VanillaCallPayoff>();}
+\DoxyCodeLine{00037     \textcolor{keywordflow}{else}                vanillaPayoff = std::make\_unique<VanillaPutPayoff>();}
+\DoxyCodeLine{00038 }
+\DoxyCodeLine{00039     \textcolor{comment}{// Cache lookback payoff (virtual dispatch)}}
+\DoxyCodeLine{00040     \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& lbPayoff = option.\mbox{\hyperlink{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}{getPayoff}}();}
+\DoxyCodeLine{00041 }
+\DoxyCodeLine{00042     \textcolor{comment}{// Model / option parameters}}
+\DoxyCodeLine{00043     \textcolor{keyword}{const} \textcolor{keywordtype}{double} r = model\_.\mbox{\hyperlink{classBlackScholesModel_a9889f556ac89d636583b55be9de25aba}{getRiskFreeRate}}();}
+\DoxyCodeLine{00044     \textcolor{keyword}{const} \textcolor{keywordtype}{double} T = option.\mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{getMaturity}}();}
+\DoxyCodeLine{00045 }
+\DoxyCodeLine{00046     \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0 = model\_.\mbox{\hyperlink{classBlackScholesModel_ab2677940e3cfbb91f75b6c75af41e214}{getInitialPrice}}();}
+\DoxyCodeLine{00047     \textcolor{keyword}{const} \textcolor{keywordtype}{double} K  = S0 * std::exp(r * (T -\/ t0));}
+\DoxyCodeLine{00048 }
+\DoxyCodeLine{00049     \textcolor{keyword}{const} \textcolor{keywordtype}{double} C0 = option.\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}()}
+\DoxyCodeLine{00050         ? model\_.\mbox{\hyperlink{classBlackScholesModel_a4a4c78dd2b90b7f5c65a1ce840f94e71}{priceCallBS}}(S0, K, T -\/ t0)}
+\DoxyCodeLine{00051         : model\_.\mbox{\hyperlink{classBlackScholesModel_a99f117ead2608f4cf54bd1fa3801e9be}{pricePutBS}}(S0, K, T -\/ t0);}
+\DoxyCodeLine{00052 }
+\DoxyCodeLine{00053     \textcolor{keyword}{const} \textcolor{keywordtype}{double} disc = std::exp(-\/r * (T -\/ t0));}
+\DoxyCodeLine{00054 }
+\DoxyCodeLine{00055     \textcolor{keyword}{const} \textcolor{keywordtype}{int} N  = numPaths\_;}
+\DoxyCodeLine{00056     \textcolor{keyword}{const} \textcolor{keywordtype}{int} bs = batchSize\_;}
+\DoxyCodeLine{00057 }
+\DoxyCodeLine{00058 \textcolor{preprocessor}{    \#pragma omp parallel}}
+\DoxyCodeLine{00059     \{}
+\DoxyCodeLine{00060         \textcolor{keyword}{const} \textcolor{keywordtype}{int} tid = omp\_get\_thread\_num();}
+\DoxyCodeLine{00061         \textcolor{keyword}{auto}\& gen = generators[tid];}
+\DoxyCodeLine{00062         std::normal\_distribution<double> dist(0.0, 1.0);}
+\DoxyCodeLine{00063 }
+\DoxyCodeLine{00064         \textcolor{comment}{// Thread-\/local preallocation (avoid reallocations/resizes)}}
+\DoxyCodeLine{00065         std::vector<double> path(numSteps\_ + 1);}
+\DoxyCodeLine{00066         std::vector<double> strikes(numSteps\_ + 1);}
+\DoxyCodeLine{00067 }
+\DoxyCodeLine{00068         \textcolor{keywordtype}{double} localSumX  = 0.0;}
+\DoxyCodeLine{00069         \textcolor{keywordtype}{double} localSumY  = 0.0;}
+\DoxyCodeLine{00070         \textcolor{keywordtype}{double} localSumY2 = 0.0;}
+\DoxyCodeLine{00071         \textcolor{keywordtype}{double} localSumXY = 0.0;}
+\DoxyCodeLine{00072 }
+\DoxyCodeLine{00073         \textcolor{comment}{// ADDED: local X\string^2 accumulator}}
+\DoxyCodeLine{00074         \textcolor{keywordtype}{double} localSumX2 = 0.0;}
+\DoxyCodeLine{00075 }
+\DoxyCodeLine{00076 \textcolor{preprocessor}{        \#pragma omp for schedule(static)}}
+\DoxyCodeLine{00077         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < N; i += bs)}
+\DoxyCodeLine{00078         \{}
+\DoxyCodeLine{00079             \textcolor{keyword}{const} \textcolor{keywordtype}{int} end = std::min(i + bs, N);}
+\DoxyCodeLine{00080             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = i; j < end; ++j)}
+\DoxyCodeLine{00081             \{}
+\DoxyCodeLine{00082                 model\_.\mbox{\hyperlink{classBlackScholesModel_acd6fe10b4176b2d2bb1007fa19eefdd1}{simulate\_path\_into}}(path, T, numSteps\_, gen, dist);}
+\DoxyCodeLine{00083                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} ST = path[numSteps\_];}
+\DoxyCodeLine{00084 }
+\DoxyCodeLine{00085                 option.\mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{computePathStrikesInto}}(path, strikes);}
+\DoxyCodeLine{00086                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} strike0 = strikes[0];}
+\DoxyCodeLine{00087 }
+\DoxyCodeLine{00088                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} X = disc * lbPayoff(ST, strike0);}
+\DoxyCodeLine{00089                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} Y = disc * (*vanillaPayoff)(ST, K);}
+\DoxyCodeLine{00090 }
+\DoxyCodeLine{00091                 localSumX  += X;}
+\DoxyCodeLine{00092                 \textcolor{comment}{// ADDED: accumulate X\string^2}}
+\DoxyCodeLine{00093                 localSumX2 += X * X;}
+\DoxyCodeLine{00094 }
+\DoxyCodeLine{00095                 localSumY  += Y;}
+\DoxyCodeLine{00096                 localSumY2 += Y * Y;}
+\DoxyCodeLine{00097                 localSumXY += X * Y;}
+\DoxyCodeLine{00098             \}}
+\DoxyCodeLine{00099         \}}
+\DoxyCodeLine{00100 }
+\DoxyCodeLine{00101         \textcolor{comment}{// Single writeback per thread}}
+\DoxyCodeLine{00102         threadSumX[tid]  += localSumX;}
+\DoxyCodeLine{00103         \textcolor{comment}{// ADDED: writeback X\string^2}}
+\DoxyCodeLine{00104         threadSumX2[tid] += localSumX2;}
+\DoxyCodeLine{00105 }
+\DoxyCodeLine{00106         threadSumY[tid]  += localSumY;}
+\DoxyCodeLine{00107         threadSumY2[tid] += localSumY2;}
+\DoxyCodeLine{00108         threadSumXY[tid] += localSumXY;}
+\DoxyCodeLine{00109     \}}
+\DoxyCodeLine{00110 }
+\DoxyCodeLine{00111     \textcolor{comment}{// Reduction across threads}}
+\DoxyCodeLine{00112     \textcolor{keywordtype}{double} sumX = 0.0, sumY = 0.0, sumY2 = 0.0, sumXY = 0.0;}
+\DoxyCodeLine{00113     \textcolor{comment}{// ADDED: reduce X\string^2}}
+\DoxyCodeLine{00114     \textcolor{keywordtype}{double} sumX2 = 0.0;}
+\DoxyCodeLine{00115 }
+\DoxyCodeLine{00116     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} tid = 0; tid < nThreads; ++tid) \{}
+\DoxyCodeLine{00117         sumX  += threadSumX[tid];}
+\DoxyCodeLine{00118         sumX2 += threadSumX2[tid];   \textcolor{comment}{// ADDED}}
+\DoxyCodeLine{00119         sumY  += threadSumY[tid];}
+\DoxyCodeLine{00120         sumY2 += threadSumY2[tid];}
+\DoxyCodeLine{00121         sumXY += threadSumXY[tid];}
+\DoxyCodeLine{00122     \}}
+\DoxyCodeLine{00123 }
+\DoxyCodeLine{00124     \textcolor{keyword}{const} \textcolor{keywordtype}{double} invN = 1.0 / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(numPaths\_);}
+\DoxyCodeLine{00125     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanX  = sumX  * invN;}
+\DoxyCodeLine{00126     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanY  = sumY  * invN;}
+\DoxyCodeLine{00127     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanY2 = sumY2 * invN;}
+\DoxyCodeLine{00128     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanXY = sumXY * invN;}
+\DoxyCodeLine{00129 }
+\DoxyCodeLine{00130     \textcolor{comment}{// ADDED: mean of X\string^2 and Var(X)}}
+\DoxyCodeLine{00131     \textcolor{keyword}{const} \textcolor{keywordtype}{double} meanX2 = sumX2 * invN;}
+\DoxyCodeLine{00132 }
+\DoxyCodeLine{00133     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varY  = meanY2 -\/ meanY * meanY;}
+\DoxyCodeLine{00134     \textcolor{keyword}{const} \textcolor{keywordtype}{double} covXY = meanXY -\/ meanX * meanY;}
+\DoxyCodeLine{00135 }
+\DoxyCodeLine{00136     \textcolor{comment}{// ADDED: Var(X)}}
+\DoxyCodeLine{00137     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varX  = meanX2 -\/ meanX * meanX;}
+\DoxyCodeLine{00138 }
+\DoxyCodeLine{00139     \textcolor{keyword}{const} \textcolor{keywordtype}{double} alpha = (varY > 0.0) ? (covXY / varY) : 0.0;}
+\DoxyCodeLine{00140 }
+\DoxyCodeLine{00141     \textcolor{comment}{// CHANGED: compute price then CI}}
+\DoxyCodeLine{00142     \textcolor{keyword}{const} \textcolor{keywordtype}{double} price = meanX -\/ alpha * (meanY -\/ C0);}
+\DoxyCodeLine{00143 }
+\DoxyCodeLine{00144     \textcolor{comment}{// Plug-\/in variance of Z = X -\/ alpha*(Y -\/ C0) with alpha treated as fixed}}
+\DoxyCodeLine{00145     \textcolor{keyword}{const} \textcolor{keywordtype}{double} varZ = varX + alpha * alpha * varY -\/ 2.0 * alpha * covXY;}
+\DoxyCodeLine{00146 }
+\DoxyCodeLine{00147     \textcolor{keyword}{const} \textcolor{keywordtype}{double} N\_d = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(numPaths\_);}
+\DoxyCodeLine{00148     \textcolor{keyword}{const} \textcolor{keywordtype}{double} stdError = (varZ > 0.0) ? std::sqrt(varZ / N\_d) : 0.0;}
+\DoxyCodeLine{00149 }
+\DoxyCodeLine{00150     \textcolor{keyword}{const} \textcolor{keywordtype}{double} ciLower = price -\/ z * stdError;}
+\DoxyCodeLine{00151     \textcolor{keyword}{const} \textcolor{keywordtype}{double} ciUpper = price + z * stdError;}
+\DoxyCodeLine{00152 }
+\DoxyCodeLine{00153     \textcolor{keywordflow}{return} MCResult\{price, stdError, ciLower, ciUpper\};}
+\DoxyCodeLine{00154 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{MonteCarlo_8hpp}{Monte\+Carlo.\+hpp}}\item 
+src/\mbox{\hyperlink{MonteCarlo_8cpp}{Monte\+Carlo.\+cpp}}\end{DoxyCompactItemize}

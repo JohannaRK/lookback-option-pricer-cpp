@@ -1,0 +1,180 @@
+\hypertarget{classGreeksCalculator}{}\doxysection{Greeks\+Calculator Class Reference}
+\label{classGreeksCalculator}\index{GreeksCalculator@{GreeksCalculator}}
+
+
+{\ttfamily \#include $<$Greeks.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGreeksCalculator_aa6ef59072097af20adddd28db4d5bc5d}{Greeks\+Calculator}} ()=default
+\item 
+\mbox{\hyperlink{classGreeksCalculator_ad36b41699e13e22c2a9640b7f8f39895}{Greeks\+Calculator}} (double epsS, double eps\+Sigma, double epsR, double epsT)
+\item 
+\mbox{\hyperlink{structGreeks}{Greeks}} \mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{compute\+Greeks\+\_\+t0}} (const \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} \&option, const \mbox{\hyperlink{classMonteCarloSimulator}{Monte\+Carlo\+Simulator}} \&mc\+Base, double t0, double z) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{Greeks_8hpp_source_l00024}{24}} of file \mbox{\hyperlink{Greeks_8hpp_source}{Greeks.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGreeksCalculator_aa6ef59072097af20adddd28db4d5bc5d}\label{classGreeksCalculator_aa6ef59072097af20adddd28db4d5bc5d}} 
+\index{GreeksCalculator@{GreeksCalculator}!GreeksCalculator@{GreeksCalculator}}
+\index{GreeksCalculator@{GreeksCalculator}!GreeksCalculator@{GreeksCalculator}}
+\doxysubsubsection{\texorpdfstring{GreeksCalculator()}{GreeksCalculator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Greeks\+Calculator\+::\+Greeks\+Calculator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classGreeksCalculator_ad36b41699e13e22c2a9640b7f8f39895}\label{classGreeksCalculator_ad36b41699e13e22c2a9640b7f8f39895}} 
+\index{GreeksCalculator@{GreeksCalculator}!GreeksCalculator@{GreeksCalculator}}
+\index{GreeksCalculator@{GreeksCalculator}!GreeksCalculator@{GreeksCalculator}}
+\doxysubsubsection{\texorpdfstring{GreeksCalculator()}{GreeksCalculator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Greeks\+Calculator\+::\+Greeks\+Calculator (\begin{DoxyParamCaption}\item[{double}]{epsS,  }\item[{double}]{eps\+Sigma,  }\item[{double}]{epsR,  }\item[{double}]{epsT }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{Greeks_8hpp_source_l00033}{33}} of file \mbox{\hyperlink{Greeks_8hpp_source}{Greeks.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00034         : epsS\_(epsS), epsSigma\_(epsSigma), epsR\_(epsR), epsT\_(epsT) \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}\label{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}} 
+\index{GreeksCalculator@{GreeksCalculator}!computeGreeks\_t0@{computeGreeks\_t0}}
+\index{computeGreeks\_t0@{computeGreeks\_t0}!GreeksCalculator@{GreeksCalculator}}
+\doxysubsubsection{\texorpdfstring{computeGreeks\_t0()}{computeGreeks\_t0()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structGreeks}{Greeks}} Greeks\+Calculator\+::compute\+Greeks\+\_\+t0 (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} \&}]{option,  }\item[{const \mbox{\hyperlink{classMonteCarloSimulator}{Monte\+Carlo\+Simulator}} \&}]{mc\+Base,  }\item[{double}]{t0,  }\item[{double}]{z }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{Greeks_8cpp_source_l00010}{10}} of file \mbox{\hyperlink{Greeks_8cpp_source}{Greeks.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00014 \{}
+\DoxyCodeLine{00015     \textcolor{keyword}{auto} model = mcBase.\mbox{\hyperlink{classMonteCarloSimulator_aeaa0621901ac5339b0ad352430d83177}{getModel}}();}
+\DoxyCodeLine{00016 }
+\DoxyCodeLine{00017     \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0    = model.\mbox{\hyperlink{classBlackScholesModel_ab2677940e3cfbb91f75b6c75af41e214}{getInitialPrice}}();}
+\DoxyCodeLine{00018     \textcolor{keyword}{const} \textcolor{keywordtype}{double} sigma = model.getVolatility();}
+\DoxyCodeLine{00019     \textcolor{keyword}{const} \textcolor{keywordtype}{double} r     = model.getRiskFreeRate();}
+\DoxyCodeLine{00020     \textcolor{keyword}{const} \textcolor{keywordtype}{double} T     = option.\mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{getMaturity}}();}
+\DoxyCodeLine{00021 }
+\DoxyCodeLine{00022     \textcolor{comment}{// Spot: relative shock}}
+\DoxyCodeLine{00023     \textcolor{keyword}{const} \textcolor{keywordtype}{double} hS = std::max(epsS\_ * std::abs(S0), 1e-\/4);}
+\DoxyCodeLine{00024 }
+\DoxyCodeLine{00025     \textcolor{comment}{// Volatility: relative shock}}
+\DoxyCodeLine{00026     \textcolor{keyword}{const} \textcolor{keywordtype}{double} hSigma = std::max(epsSigma\_ * std::abs(sigma), 1e-\/4);}
+\DoxyCodeLine{00027 }
+\DoxyCodeLine{00028     \textcolor{comment}{// Rate: ABSOLUTE shock (e.g. 0.01 = 100 bps)}}
+\DoxyCodeLine{00029     \textcolor{keyword}{const} \textcolor{keywordtype}{double} hR = epsR\_;}
+\DoxyCodeLine{00030 }
+\DoxyCodeLine{00031     \textcolor{comment}{// Time: absolute shock}}
+\DoxyCodeLine{00032     \textcolor{keyword}{const} \textcolor{keywordtype}{double} hT = epsT\_;}
+\DoxyCodeLine{00033 }
+\DoxyCodeLine{00034     \mbox{\hyperlink{structGreeks}{Greeks}} g;}
+\DoxyCodeLine{00035 }
+\DoxyCodeLine{00036     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00037     \textcolor{comment}{// PRICE (Control Variate) + (optional CI available in MCResult)}}
+\DoxyCodeLine{00038     \textcolor{comment}{// We store only the point estimate in Greeks.}}
+\DoxyCodeLine{00039     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00040     \textcolor{keyword}{const} \textcolor{keyword}{auto} baseRes = mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z);}
+\DoxyCodeLine{00041     g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} = baseRes.price;}
+\DoxyCodeLine{00042 }
+\DoxyCodeLine{00043     \textcolor{comment}{// Store MC uncertainty for the price only}}
+\DoxyCodeLine{00044     g.\mbox{\hyperlink{structGreeks_a48d08e2f22d340698c2946931cea6a7c}{priceStdError}} = baseRes.stdError;}
+\DoxyCodeLine{00045     g.\mbox{\hyperlink{structGreeks_a6f0c04fcba6048715d2c0dff20ceb844}{priceCILower}}  = baseRes.ciLower;}
+\DoxyCodeLine{00046     g.\mbox{\hyperlink{structGreeks_a90c8347172d1640e136d6e8dda8b94c6}{priceCIUpper}}  = baseRes.ciUpper;}
+\DoxyCodeLine{00047     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00048     \textcolor{comment}{// DELTA \& GAMMA}}
+\DoxyCodeLine{00049     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00050     \{}
+\DoxyCodeLine{00051         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mUp = model; mUp.\mbox{\hyperlink{classBlackScholesModel_ae2ccf7bc82e9bb47d2ec546d79624279}{setInitialPrice}}(S0 + hS);}
+\DoxyCodeLine{00052         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mDn = model; mDn.\mbox{\hyperlink{classBlackScholesModel_ae2ccf7bc82e9bb47d2ec546d79624279}{setInitialPrice}}(S0 -\/ hS);}
+\DoxyCodeLine{00053 }
+\DoxyCodeLine{00054         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcUp(mUp, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00055                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00056         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcDn(mDn, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00057                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00058 }
+\DoxyCodeLine{00059         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pUp = mcUp.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00060         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pDn = mcDn.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00061 }
+\DoxyCodeLine{00062         g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}} = (pUp -\/ pDn) / (2.0 * hS);}
+\DoxyCodeLine{00063         g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}} = (pUp -\/ 2.0 * g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} + pDn) / (hS * hS);}
+\DoxyCodeLine{00064     \}}
+\DoxyCodeLine{00065 }
+\DoxyCodeLine{00066     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00067     \textcolor{comment}{// VEGA}}
+\DoxyCodeLine{00068     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00069     \{}
+\DoxyCodeLine{00070         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mUp = model; mUp.\mbox{\hyperlink{classBlackScholesModel_aac05ef94b7e4ff950abe6045bb715f11}{setVolatility}}(sigma + hSigma);}
+\DoxyCodeLine{00071         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mDn = model; mDn.\mbox{\hyperlink{classBlackScholesModel_aac05ef94b7e4ff950abe6045bb715f11}{setVolatility}}(sigma -\/ hSigma);}
+\DoxyCodeLine{00072 }
+\DoxyCodeLine{00073         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcUp(mUp, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00074                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00075         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcDn(mDn, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00076                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00077 }
+\DoxyCodeLine{00078         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pUp = mcUp.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00079         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pDn = mcDn.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00080 }
+\DoxyCodeLine{00081         g.\mbox{\hyperlink{structGreeks_a87709cf35763c458f36a6935f7d7ce25}{vega}} = (pUp -\/ pDn) / (2.0 * hSigma);}
+\DoxyCodeLine{00082     \}}
+\DoxyCodeLine{00083 }
+\DoxyCodeLine{00084     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00085     \textcolor{comment}{// RHO}}
+\DoxyCodeLine{00086     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00087     \{}
+\DoxyCodeLine{00088         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mUp = model; mUp.\mbox{\hyperlink{classBlackScholesModel_a01eda6a854b0af8cee802cc91dd59028}{setRiskFreeRate}}(r + hR);}
+\DoxyCodeLine{00089         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} mDn = model; mDn.\mbox{\hyperlink{classBlackScholesModel_a01eda6a854b0af8cee802cc91dd59028}{setRiskFreeRate}}(r -\/ hR);}
+\DoxyCodeLine{00090 }
+\DoxyCodeLine{00091         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcUp(mUp, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00092                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00093         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcDn(mDn, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00094                                  mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00095 }
+\DoxyCodeLine{00096         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pUp = mcUp.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00097         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pDn = mcDn.simulateOptionPriceControlVariate\_t0(option, t0, z).price;}
+\DoxyCodeLine{00098 }
+\DoxyCodeLine{00099         g.\mbox{\hyperlink{structGreeks_afaa454ff183cfa3d58902d49e4f363db}{rho}} = (pUp -\/ pDn) / (2.0 * hR);}
+\DoxyCodeLine{00100     \}}
+\DoxyCodeLine{00101 }
+\DoxyCodeLine{00102     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00103     \textcolor{comment}{// THETA (one-\/sided, time-\/decay / current-\/time bump)}}
+\DoxyCodeLine{00104     \textcolor{comment}{// We want theta = ∂P/∂t. Since τ = T -\/ t, we have ∂P/∂t = -\/∂P/∂τ.}}
+\DoxyCodeLine{00105     \textcolor{comment}{// Approximating a decrease of τ by hT is equivalent to reducing maturity T by hT}}
+\DoxyCodeLine{00106     \textcolor{comment}{// while keeping t0 fixed.}}
+\DoxyCodeLine{00107     \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00108     \{}
+\DoxyCodeLine{00109         \textcolor{keyword}{const} \textcolor{keywordtype}{double} Tdn = std::max(T -\/ hT, 1e-\/6);}
+\DoxyCodeLine{00110         \textcolor{keyword}{auto} optDn = option.\mbox{\hyperlink{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}{cloneWithMaturity}}(Tdn);}
+\DoxyCodeLine{00111 }
+\DoxyCodeLine{00112         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mcSame(model, mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a544ab141c253ccde60dad7e566b83db8}{getNumPaths}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_ad2deb85924f4ca10d9a3af63c02bec41}{getNumSteps}}(),}
+\DoxyCodeLine{00113                                    mcBase.\mbox{\hyperlink{classMonteCarloSimulator_a460b44342af0e563e8dfb2ca5946f00a}{getBatchSize}}(), mcBase.\mbox{\hyperlink{classMonteCarloSimulator_acb4c34f9bc09e5929fabb9bb925eddb0}{getSeed}}());}
+\DoxyCodeLine{00114 }
+\DoxyCodeLine{00115         \textcolor{keyword}{const} \textcolor{keywordtype}{double} pDn = mcSame.simulateOptionPriceControlVariate\_t0(*optDn, t0, z).price;}
+\DoxyCodeLine{00116 }
+\DoxyCodeLine{00117         \textcolor{comment}{// theta = ∂P/∂t at t0 (time decay). With maturity fixed, increasing t reduces}}
+\DoxyCodeLine{00118         \textcolor{comment}{// time-\/to-\/maturity. Using a one-\/sided bump on time-\/to-\/maturity:}}
+\DoxyCodeLine{00119         \textcolor{comment}{//   theta ≈ (P(T -\/ hT) -\/ P(T)) / hT}}
+\DoxyCodeLine{00120         g.\mbox{\hyperlink{structGreeks_a82fcb8b4f18e8afc91ab23df69ae6f17}{theta}} = (pDn -\/ g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}}) / hT;}
+\DoxyCodeLine{00121     \}}
+\DoxyCodeLine{00122 }
+\DoxyCodeLine{00123     \textcolor{keywordflow}{return} g;}
+\DoxyCodeLine{00124 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{Greeks_8hpp}{Greeks.\+hpp}}\item 
+src/\mbox{\hyperlink{Greeks_8cpp}{Greeks.\+cpp}}\end{DoxyCompactItemize}

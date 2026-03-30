@@ -1,0 +1,295 @@
+\hypertarget{tests__lookback_8cpp_source}{}\doxysection{tests\+\_\+lookback.\+cpp}
+\label{tests__lookback_8cpp_source}\index{test/tests\_lookback.cpp@{test/tests\_lookback.cpp}}
+\mbox{\hyperlink{tests__lookback_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00001}00001 \textcolor{comment}{// ================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00002}00002 \textcolor{comment}{// LookbackPricerTests (Boost.Test)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00003}00003 \textcolor{comment}{// We validate key building blocks of the project:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00004}00004 \textcolor{comment}{// -\/ Black–Scholes vanilla formulas (put–call parity)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00005}00005 \textcolor{comment}{// -\/ GBM path simulation sanity + input validation}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00006}00006 \textcolor{comment}{// -\/ Lookback strike logic (running min/max convention used in our code)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00007}00007 \textcolor{comment}{// -\/ Monte-\/Carlo outputs (CI consistency, determinism with fixed seed + 1 thread, homogeneity)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00008}00008 \textcolor{comment}{// -\/ Greeks structural properties (homogeneity => delta = price/S0 and gamma \string~ 0)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00009}00009 \textcolor{comment}{// ================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00011}\mbox{\hyperlink{tests__lookback_8cpp_a6b2a3852db8bb19ab6909bac01859985}{00011}} \textcolor{preprocessor}{\#define BOOST\_TEST\_MODULE LookbackPricerTests}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00012}00012 \textcolor{preprocessor}{\#include <boost/test/included/unit\_test.hpp>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00014}00014 \textcolor{preprocessor}{\#include <cmath>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00015}00015 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00016}00016 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00017}00017 \textcolor{preprocessor}{\#include <limits>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00018}00018 \textcolor{preprocessor}{\#include <omp.h>}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00020}00020 \textcolor{comment}{// We include our project headers (pricing engine)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00021}00021 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{BlackScholesModel_8hpp}{BlackScholesModel.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00022}00022 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{MonteCarlo_8hpp}{MonteCarlo.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00023}00023 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{LookbackOption_8hpp}{LookbackOption.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00024}00024 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{Greeks_8hpp}{Greeks.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00025}00025 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00026}00026 \textcolor{comment}{// We use a tiny helper to ensure numbers are not NaN/Inf.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00027}\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{00027}} \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(\textcolor{keywordtype}{double} x) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00028}00028     \textcolor{keywordflow}{return} std::isfinite(x);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00029}00029 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00031}00031 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00032}00032 \textcolor{comment}{// 1) BLACK\_SCHOLES tests: validate basic analytical pieces}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00033}00033 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00034}00034 BOOST\_AUTO\_TEST\_SUITE(BLACK\_SCHOLES)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00035}00035 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00036}00036 \textcolor{comment}{// We check put–call parity for vanilla options:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00037}00037 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00038}00038 \textcolor{comment}{//   C -\/ P = S -\/ K * exp(-\/rT)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00039}00039 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00040}00040 \textcolor{comment}{// If our call/put formulas are correct, this identity must hold.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00041}\mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{00041}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(PutCallParity) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00042}00042     \textcolor{keyword}{const} \textcolor{keywordtype}{double} S = 100.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00043}00043     \textcolor{keyword}{const} \textcolor{keywordtype}{double} K = 110.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00044}00044     \textcolor{keyword}{const} \textcolor{keywordtype}{double} r = 0.03;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00045}00045     \textcolor{keyword}{const} \textcolor{keywordtype}{double} sigma = 0.25;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00046}00046     \textcolor{keyword}{const} \textcolor{keywordtype}{double} T = 1.5;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00047}00047 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00048}00048     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} m(r, sigma, S);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00050}00050     \textcolor{keyword}{const} \textcolor{keywordtype}{double} call = m.\mbox{\hyperlink{classBlackScholesModel_a4a4c78dd2b90b7f5c65a1ce840f94e71}{priceCallBS}}(S, K, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00051}00051     \textcolor{keyword}{const} \textcolor{keywordtype}{double} put  = m.\mbox{\hyperlink{classBlackScholesModel_a99f117ead2608f4cf54bd1fa3801e9be}{pricePutBS}}(S, K, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00053}00053     \textcolor{keyword}{const} \textcolor{keywordtype}{double} lhs = call -\/ put;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00054}00054     \textcolor{keyword}{const} \textcolor{keywordtype}{double} rhs = S -\/ K * std::exp(-\/r * T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00055}00055 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00056}00056     \textcolor{comment}{// BOOST\_CHECK\_CLOSE uses relative error in percent.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00057}00057     BOOST\_CHECK\_CLOSE(lhs, rhs, 1e-\/8); \textcolor{comment}{// in percent}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00058}00058 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00060}00060 \textcolor{comment}{// We verify that path simulation returns the right size (N steps => N+1 points),}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00061}00061 \textcolor{comment}{// stays strictly positive (GBM property), and values are finite.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00062}\mbox{\hyperlink{tests__lookback_8cpp_a7aa7daca95a8f395cd6d84e6a45d273a}{00062}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(SimulatePathSizeAndPositive) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00063}00063     \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0 = 100.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00064}00064     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} m(0.05, 0.2, S0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00065}00065 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00066}00066     \textcolor{comment}{// We fix the RNG seed to make the test reproducible.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00067}00067     std::mt19937 gen(42);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00068}00068     std::normal\_distribution<double> dist(0.0, 1.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00069}00069 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00070}00070     \textcolor{keyword}{const} \textcolor{keywordtype}{int} N = 252;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00071}00071     \textcolor{keyword}{auto} path = m.\mbox{\hyperlink{classBlackScholesModel_a36ae6ef3de19dec2bde632a3d0ba9980}{simulate\_path}}(1.0, N, gen, dist);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00072}00072 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00073}00073     \textcolor{comment}{// We expect the vector to include S0 + N simulated points.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00074}00074     BOOST\_REQUIRE\_EQUAL(path.size(), (\textcolor{keywordtype}{size\_t})N + 1);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00075}00075     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{double} s : path) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00076}00076         BOOST\_CHECK(s > 0.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00077}00077         BOOST\_CHECK(\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(s));}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00078}00078     \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00079}00079 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00080}00080 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00081}00081 \textcolor{comment}{// We validate input checking: a non-\/positive number of steps should throw.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00082}\mbox{\hyperlink{tests__lookback_8cpp_af41bf8d8f46cbaa82e38cab815de768a}{00082}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(SimulatePathThrowsOnNonPositiveSteps) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00083}00083     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} m(0.05, 0.2, 100.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00084}00084     std::mt19937 gen(42);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00085}00085     std::normal\_distribution<double> dist(0.0, 1.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00086}00086 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00087}00087     BOOST\_CHECK\_THROW(m.\mbox{\hyperlink{classBlackScholesModel_a36ae6ef3de19dec2bde632a3d0ba9980}{simulate\_path}}(1.0, 0, gen, dist), std::invalid\_argument);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00088}00088     BOOST\_CHECK\_THROW(m.\mbox{\hyperlink{classBlackScholesModel_a36ae6ef3de19dec2bde632a3d0ba9980}{simulate\_path}}(1.0, -\/5, gen, dist), std::invalid\_argument);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00089}00089 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00090}00090 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00091}00091 BOOST\_AUTO\_TEST\_SUITE\_END()}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00092}00092 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00093}00093 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00094}00094 \textcolor{comment}{// 2) LOOKBACK\_STRIKES tests: validate running min/max logic}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00095}00095 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00096}00096 BOOST\_AUTO\_TEST\_SUITE(LOOKBACK\_STRIKES)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00097}00097 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00098}00098 \textcolor{comment}{// For a floating lookback CALL in our implementation,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00099}00099 \textcolor{comment}{// the "{}strike path"{} follows the running MIN convention used by the code.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00100}00100 \textcolor{comment}{// We test both vector strike generation and direct strike-\/at-\/index queries.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00101}\mbox{\hyperlink{tests__lookback_8cpp_ad80cb3e871ebc47378b1042d0aab9a33}{00101}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(CallRunningMinStrikes) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00102}00102     \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00103}00103     \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} opt(payoff, 1.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00104}00104 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00105}00105     std::vector<double> path = \{100, 90, 120, 80, 110\};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00106}00106 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00107}00107     \textcolor{keyword}{auto} strikes = opt.\mbox{\hyperlink{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}{computePathStrikes}}(path);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00108}00108     std::vector<double> expected = \{80, 80, 80, 80, 110\};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00109}00109 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00110}00110     BOOST\_REQUIRE\_EQUAL(strikes.size(), expected.size());}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00111}00111     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < strikes.size(); ++i)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00112}00112         BOOST\_CHECK\_EQUAL(strikes[i], expected[i]);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00113}00113 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00114}00114     \textcolor{comment}{// We also check the scalar accessor computeStrike at a few indices.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00115}00115     BOOST\_CHECK\_EQUAL(opt.\mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{computeStrike}}(path, 0), 80);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00116}00116     BOOST\_CHECK\_EQUAL(opt.\mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{computeStrike}}(path, 4), 110);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00117}00117     BOOST\_CHECK\_EQUAL(opt.\mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{computeStrike}}(path, 2), 80);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00118}00118 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00119}00119 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00120}00120 \textcolor{comment}{// For a floating lookback PUT in our implementation,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00121}00121 \textcolor{comment}{// the "{}strike path"{} follows the running MAX convention used by the code.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00122}\mbox{\hyperlink{tests__lookback_8cpp_a37e5dde165dcb7912ac754125651996a}{00122}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(PutRunningMaxStrikes) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00123}00123     \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00124}00124     \mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} opt(payoff, 1.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00125}00125 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00126}00126     std::vector<double> path = \{100, 90, 120, 80, 110\};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00127}00127 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00128}00128     std::vector<double> strikes;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00129}00129     opt.\mbox{\hyperlink{classLookbackPutOption_aa51c9a2c8e32e2c0a5029badbaa39791}{computePathStrikesInto}}(path, strikes);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00130}00130     std::vector<double> expected = \{120, 120, 120, 110, 110\};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00132}00132     BOOST\_REQUIRE\_EQUAL(strikes.size(), expected.size());}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00133}00133     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < strikes.size(); ++i)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00134}00134         BOOST\_CHECK\_EQUAL(strikes[i], expected[i]);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00135}00135 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00136}00136     BOOST\_CHECK\_EQUAL(opt.\mbox{\hyperlink{classLookbackPutOption_a31ec8db370ec26d3c7c138645fd42f49}{computeStrike}}(path, 0), 120);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00137}00137     BOOST\_CHECK\_EQUAL(opt.\mbox{\hyperlink{classLookbackPutOption_a31ec8db370ec26d3c7c138645fd42f49}{computeStrike}}(path, 3), 110);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00138}00138 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00139}00139 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00140}00140 BOOST\_AUTO\_TEST\_SUITE\_END()}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00142}00142 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00143}00143 \textcolor{comment}{// 3) MONTE\_CARLO tests: validate statistical outputs + invariants}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00144}00144 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00145}00145 BOOST\_AUTO\_TEST\_SUITE(MONTE\_CARLO)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00146}00146 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00147}00147 \textcolor{comment}{// We check that:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00148}00148 \textcolor{comment}{// -\/ the MC result is finite,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00149}00149 \textcolor{comment}{// -\/ stdError is non-\/negative,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00150}00150 \textcolor{comment}{// -\/ CI brackets the point estimate,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00151}00151 \textcolor{comment}{// -\/ CI width matches 2*z*stdError (symmetric normal CI as implemented).}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00152}\mbox{\hyperlink{tests__lookback_8cpp_aebe9471ad8d299d56e6f97ad36708f2c}{00152}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(CIContainsPriceAndHasCorrectWidth) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00153}00153     \textcolor{comment}{// We force 1 thread to make the result deterministic and avoid reduction noise.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00154}00154     omp\_set\_num\_threads(1);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00156}00156     \textcolor{keywordtype}{double} S0 = 100, r = 0.05, sigma = 0.2, T = 1.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00157}00157     \textcolor{keywordtype}{int} steps = 252, paths = 20000, batch = 4, seed = 42;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00158}00158     \textcolor{keywordtype}{double} t0 = 0.0, z = 1.96;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00159}00159 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00160}00160     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00161}00161 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00162}00162     \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00163}00163     \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00164}00164 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00165}00165     \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00166}00166     \textcolor{keyword}{auto} res = mc.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00167}00167 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00168}00168     BOOST\_CHECK(\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(res.price));}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00169}00169     BOOST\_CHECK(res.stdError >= 0.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00170}00170     BOOST\_CHECK(res.ciLower <= res.price);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00171}00171     BOOST\_CHECK(res.price <= res.ciUpper);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00172}00172 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00173}00173     \textcolor{keyword}{const} \textcolor{keywordtype}{double} width = res.ciUpper -\/ res.ciLower;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00174}00174     BOOST\_CHECK\_CLOSE(width, 2.0 * z * res.stdError, 1e-\/10);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00175}00175 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00176}00176 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00177}00177 \textcolor{comment}{// We verify determinism when we run twice with the same seed and 1 thread.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00178}00178 \textcolor{comment}{// This is important for reproducible tests.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00179}\mbox{\hyperlink{tests__lookback_8cpp_a04c29d36824c21ed2a92bb1c4ec9bfc5}{00179}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(DeterministicWithSingleThreadAndSeed) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00180}00180     omp\_set\_num\_threads(1);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00181}00181 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00182}00182     \textcolor{keywordtype}{double} S0 = 100, r = 0.05, sigma = 0.2, T = 1.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00183}00183     \textcolor{keywordtype}{int} steps = 252, paths = 5000, batch = 4, seed = 123;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00184}00184     \textcolor{keywordtype}{double} t0 = 0.0, z = 1.96;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00185}00185 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00186}00186     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00187}00187 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00188}00188     \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00189}00189     \mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00190}00190 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00191}00191     \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00192}00192     \textcolor{keyword}{auto} res1 = mc.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00193}00193     \textcolor{keyword}{auto} res2 = mc.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00194}00194 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00195}00195     BOOST\_CHECK\_EQUAL(res1.price, res2.price);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00196}00196     BOOST\_CHECK\_EQUAL(res1.stdError, res2.stdError);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00197}00197     BOOST\_CHECK\_EQUAL(res1.ciLower, res2.ciLower);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00198}00198     BOOST\_CHECK\_EQUAL(res1.ciUpper, res2.ciUpper);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00199}00199 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00200}00200 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00201}00201 \textcolor{comment}{// We test positive homogeneity in S0 for our lookback payoff under BS:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00202}00202 \textcolor{comment}{// if we scale S0 by a factor a, the whole path scales by a and the payoff scales by a,}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00203}00203 \textcolor{comment}{// so the price should scale by a as well (same random numbers via same seed).}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00204}\mbox{\hyperlink{tests__lookback_8cpp_affc3d09d7485ecbc032fdd9c09cd51fe}{00204}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(HomogeneityPriceScalesWithSpot) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00205}00205     omp\_set\_num\_threads(1);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00206}00206 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00207}00207     \textcolor{keywordtype}{double} r = 0.05, sigma = 0.2, T = 1.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00208}00208     \textcolor{keywordtype}{int} steps = 252, paths = 10000, batch = 4, seed = 42;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00209}00209     \textcolor{keywordtype}{double} t0 = 0.0, z = 1.96;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00210}00210 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00211}00211     \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00212}00212     \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00213}00213 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00214}00214     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} m1(r, sigma, 100.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00215}00215     \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} m2(r, sigma, 150.0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00216}00216 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00217}00217     \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc1(m1, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00218}00218     \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc2(m2, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00219}00219 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00220}00220     \textcolor{keyword}{const} \textcolor{keywordtype}{double} p1 = mc1.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z).\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a1819ede586658398efa3ccff1c994d3f}{price}};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00221}00221     \textcolor{keyword}{const} \textcolor{keywordtype}{double} p2 = mc2.\mbox{\hyperlink{classMonteCarloSimulator_ad6250e24ea605d46e61a13fc50cf8d47}{simulateOptionPriceControlVariate\_t0}}(option, t0, z).\mbox{\hyperlink{structMonteCarloSimulator_1_1MCResult_a1819ede586658398efa3ccff1c994d3f}{price}};}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00222}00222 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00223}00223     BOOST\_CHECK\_CLOSE(p2, 1.5 * p1, 1e-\/12);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00224}00224 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00225}00225 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00226}00226 BOOST\_AUTO\_TEST\_SUITE\_END()}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00227}00227 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00228}00228 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00229}00229 \textcolor{comment}{// 4) GREEKS tests: structural properties for this payoff/model}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00230}00230 \textcolor{comment}{// ======================================================}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00231}00231 BOOST\_AUTO\_TEST\_SUITE(GREEKS)}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00232}00232 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00233}00233 \textcolor{comment}{// For a homogeneous payoff (degree 1 in S0), we should have:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00234}00234 \textcolor{comment}{// -\/ price(S0) = S0 * price(1)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00235}00235 \textcolor{comment}{// -\/ delta = dP/dS0 = price/S0}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00236}00236 \textcolor{comment}{// -\/ gamma = d2P/dS0\string^2 = 0}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00237}00237 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00238}00238 \textcolor{comment}{// We compute Greeks with our code and check these relationships.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00239}00239 \textcolor{comment}{// We also include optional regression checks with fixed seed + 1 thread.}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00240}\mbox{\hyperlink{tests__lookback_8cpp_a458288b11b68427d0196a413c6c933d2}{00240}} \mbox{\hyperlink{tests__lookback_8cpp_a33274bf555d0aafa43ff809acc55e099}{BOOST\_AUTO\_TEST\_CASE}}(DeltaEqualsPriceOverSpotAndGammaNearZero) \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00241}00241     omp\_set\_num\_threads(1);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00242}00242 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00243}00243     \textcolor{keywordtype}{double} S0 = 100, r = 0.05, sigma = 0.2, T = 1.0;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00244}00244     \textcolor{keywordtype}{int} steps = 252, paths = 20000, batch = 4, seed = 42;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00245}00245     \textcolor{keywordtype}{double} t0 = 0.0, z = 1.96;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00246}00246 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00247}00247     \mbox{\hyperlink{classGreeksCalculator}{GreeksCalculator}} calc;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00248}00248 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00249}00249     \textcolor{comment}{// CALL}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00250}00250     \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00251}00251         \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00252}00252         \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00253}00253 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00254}00254         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00255}00255         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00256}00256 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00257}00257         \mbox{\hyperlink{structGreeks}{Greeks}} g = calc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(option, mc, t0, z);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00258}00258 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00259}00259         BOOST\_CHECK(\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}}));}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00260}00260         BOOST\_CHECK(\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}}));}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00261}00261         BOOST\_CHECK(\mbox{\hyperlink{tests__lookback_8cpp_abcca6d0166974eca2c73f16b61e545ea}{is\_finite}}(g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}}));}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00262}00262 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00263}00263         \textcolor{comment}{// Homogeneity identity for this payoff:}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00264}00264         BOOST\_CHECK\_CLOSE(g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}}, g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} / S0, 1e-\/8);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00265}00265         BOOST\_CHECK\_SMALL(g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}}, 1e-\/8);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00266}00266 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00267}00267         \textcolor{comment}{// Optional: regression check (single-\/thread, fixed seed)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00268}00268         BOOST\_CHECK\_CLOSE(g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}}, 16.6381533494, 1e-\/6);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00269}00269     \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00270}00270 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00271}00271     \textcolor{comment}{// PUT}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00272}00272     \{}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00273}00273         \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00274}00274         \mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00275}00275 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00276}00276         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00277}00277         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, paths, steps, batch, seed);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00278}00278 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00279}00279         \mbox{\hyperlink{structGreeks}{Greeks}} g = calc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(option, mc, t0, z);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00280}00280 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00281}00281         BOOST\_CHECK\_CLOSE(g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}}, g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}} / S0, 1e-\/8);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00282}00282         BOOST\_CHECK\_SMALL(g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}}, 1e-\/8);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00283}00283 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00284}00284         \textcolor{comment}{// Optional: regression check (single-\/thread, fixed seed)}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00285}00285         BOOST\_CHECK\_CLOSE(g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}}, 13.5141932120, 1e-\/6);}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00286}00286     \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00287}00287 \}}
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00288}00288 }
+\DoxyCodeLine{\Hypertarget{tests__lookback_8cpp_source_l00289}00289 BOOST\_AUTO\_TEST\_SUITE\_END()}
+
+\end{DoxyCode}

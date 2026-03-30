@@ -1,0 +1,193 @@
+\hypertarget{VBAExports_8cpp_source}{}\doxysection{VBAExports.\+cpp}
+\label{VBAExports_8cpp_source}\index{src/VBAExports.cpp@{src/VBAExports.cpp}}
+\mbox{\hyperlink{VBAExports_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{VBAExports_8h}{VBAExports.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00002}00002 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{BlackScholesModel_8hpp}{BlackScholesModel.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{MonteCarlo_8hpp}{MonteCarlo.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{LookbackOption_8hpp}{LookbackOption.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00006}00006 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{Greeks_8hpp}{Greeks.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00008}00008 \textcolor{preprocessor}{\#include <limits>}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00010}00010 \textcolor{keyword}{namespace }\{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00012}00012 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} fill\_nan(\textcolor{keywordtype}{double}* out10) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00013}00013     \textcolor{keywordflow}{if} (!out10) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00014}00014     \textcolor{keyword}{const} \textcolor{keywordtype}{double} nan = std::numeric\_limits<double>::quiet\_NaN();}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00015}00015     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 10; ++i) out10[i] = nan;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00016}00016 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00018}00018 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} fill\_out10(\textcolor{keyword}{const} \mbox{\hyperlink{structGreeks}{Greeks}}\& g, \textcolor{keywordtype}{double}* out10) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00019}00019     \textcolor{keywordflow}{if} (!out10) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00020}00020     out10[0] = g.\mbox{\hyperlink{structGreeks_a56f22a06388e35c5dc8823d7e74b5c9d}{price}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00021}00021     out10[1] = g.\mbox{\hyperlink{structGreeks_a9d16140323f20876507a2d5453696b1a}{delta}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00022}00022     out10[2] = g.\mbox{\hyperlink{structGreeks_afcef8fafe28ec46b041eda551aefac76}{gamma}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00023}00023     out10[3] = g.\mbox{\hyperlink{structGreeks_a87709cf35763c458f36a6935f7d7ce25}{vega}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00024}00024     out10[4] = g.\mbox{\hyperlink{structGreeks_afaa454ff183cfa3d58902d49e4f363db}{rho}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00025}00025     out10[5] = g.\mbox{\hyperlink{structGreeks_a82fcb8b4f18e8afc91ab23df69ae6f17}{theta}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00026}00026     out10[6] = g.\mbox{\hyperlink{structGreeks_a48d08e2f22d340698c2946931cea6a7c}{priceStdError}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00027}00027     out10[7] = g.\mbox{\hyperlink{structGreeks_a6f0c04fcba6048715d2c0dff20ceb844}{priceCILower}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00028}00028     out10[8] = g.\mbox{\hyperlink{structGreeks_a90c8347172d1640e136d6e8dda8b94c6}{priceCIUpper}};}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00029}00029     out10[9] = 0.0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00030}00030 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00031}00031 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00032}00032 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} compute\_all(\textcolor{keywordtype}{bool} isCall,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00033}00033                        \textcolor{keywordtype}{double} S0, \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00034}00034                        \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00035}00035                        \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00036}00036                        \textcolor{keywordtype}{double}* out10)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00037}00037 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00038}00038     \textcolor{keywordflow}{if} (!out10) \textcolor{keywordflow}{return} -\/1;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00039}00039     \textcolor{keywordflow}{if} (!(S0 > 0.0) || !(sigma > 0.0) || !(T > 0.0) || numSteps <= 0 || numPaths <= 0) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00040}00040         fill\_nan(out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00041}00041         \textcolor{keywordflow}{return} -\/2;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00042}00042     \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00043}00043 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00044}00044     \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00045}00045         \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00046}00046         \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, numPaths, numSteps, batchSize, seed);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00047}00047         \mbox{\hyperlink{classGreeksCalculator}{GreeksCalculator}} gc;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00048}00048 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00049}00049         \textcolor{keywordflow}{if} (isCall) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00050}00050             \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00051}00051             \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00052}00052             \textcolor{keyword}{const} \mbox{\hyperlink{structGreeks}{Greeks}} g = gc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(option, mc, \textcolor{comment}{/*t0=*/}0.0, z);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00053}00053             fill\_out10(g, out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00054}00054         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00055}00055             \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00056}00056             \mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00057}00057             \textcolor{keyword}{const} \mbox{\hyperlink{structGreeks}{Greeks}} g = gc.\mbox{\hyperlink{classGreeksCalculator_aebdf733bd0ec8338ab5ae558bf43bfa4}{computeGreeks\_t0}}(option, mc, \textcolor{comment}{/*t0=*/}0.0, z);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00058}00058             fill\_out10(g, out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00059}00059         \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00060}00060         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00061}00061     \} \textcolor{keywordflow}{catch} (...) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00062}00062         fill\_nan(out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00063}00063         \textcolor{keywordflow}{return} -\/99;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00064}00064     \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00065}00065 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00067}00067 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} compute\_curve(\textcolor{keywordtype}{bool} isCall,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00068}00068                          \textcolor{keywordtype}{double} spotStart, \textcolor{keywordtype}{double} spotStep, \textcolor{keywordtype}{int} nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00069}00069                          \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00070}00070                          \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00071}00071                          \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00072}00072                          \textcolor{keywordtype}{double}* spots, \textcolor{keywordtype}{double}* prices, \textcolor{keywordtype}{double}* deltas)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00073}00073 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00074}00074     \textcolor{keywordflow}{if} (!spots || !prices || !deltas) \textcolor{keywordflow}{return} -\/1;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00075}00075     \textcolor{keywordflow}{if} (nPoints <= 0) \textcolor{keywordflow}{return} -\/2;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00076}00076     \textcolor{keywordflow}{if} (!(spotStep > 0.0) || !(spotStart > 0.0) || !(sigma > 0.0) || !(T > 0.0)) \textcolor{keywordflow}{return} -\/3;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00078}00078     \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00079}00079         \textcolor{comment}{// IMPORTANT:}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00080}00080         \textcolor{comment}{// For the charts we only need PRICE and DELTA, not all Greeks.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00081}00081         \textcolor{comment}{// Calling computeGreeks\_t0 here would run many extra MC pricers per point}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00082}00082         \textcolor{comment}{// (delta/gamma/vega/rho/theta bumps). This version is \string~8x faster.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00083}00083         \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00084}00084         \textcolor{comment}{// For floating-\/strike lookbacks in Black–Scholes, P(S0) is homogeneous of degree 1:}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00085}00085         \textcolor{comment}{//   P(S0) = S0 * C  =>  Delta = dP/dS0 = C = P(S0)/S0,  Gamma ≈ 0.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00086}00086         \textcolor{comment}{// So we compute delta from the price estimate.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00087}00087 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00088}00088         \textcolor{keywordflow}{if} (isCall) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00089}00089             \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00090}00090             \mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00091}00091 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00092}00092             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPoints; ++i) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00093}00093                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0 = spotStart + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(i) * spotStep;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00094}00094                 spots[i] = S0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00095}00095 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00096}00096                 \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00097}00097 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00098}00098                 \textcolor{comment}{// Use a different seed per point to avoid perfectly "{}rigid"{} straight lines}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00099}00099                 \textcolor{comment}{// when reusing the exact same random numbers for every S0.}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00100}00100                 \textcolor{keyword}{const} \textcolor{keywordtype}{int} seed\_i = seed + i * 10007;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00101}00101 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00102}00102                 \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, numPaths, numSteps, batchSize, seed\_i);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00103}00103                 \textcolor{keyword}{const} \textcolor{keyword}{auto} res = mc.simulateOptionPriceControlVariate\_t0(option, \textcolor{comment}{/*t0=*/}0.0, z);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00104}00104 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00105}00105                 prices[i] = res.price;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00106}00106                 deltas[i] = (S0 > 0.0) ? (res.price / S0) : 0.0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00107}00107             \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00108}00108         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00109}00109             \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} payoff;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00110}00110             \mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} option(payoff, T);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00111}00111 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00112}00112             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPoints; ++i) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00113}00113                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} S0 = spotStart + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(i) * spotStep;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00114}00114                 spots[i] = S0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00115}00115 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00116}00116                 \mbox{\hyperlink{classBlackScholesModel}{BlackScholesModel}} model(r, sigma, S0);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00117}00117                 \textcolor{keyword}{const} \textcolor{keywordtype}{int} seed\_i = seed + i * 10007;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00118}00118 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00119}00119                 \mbox{\hyperlink{classMonteCarloSimulator}{MonteCarloSimulator}} mc(model, numPaths, numSteps, batchSize, seed\_i);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00120}00120                 \textcolor{keyword}{const} \textcolor{keyword}{auto} res = mc.simulateOptionPriceControlVariate\_t0(option, \textcolor{comment}{/*t0=*/}0.0, z);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00121}00121 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00122}00122                 prices[i] = res.price;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00123}00123                 deltas[i] = (S0 > 0.0) ? (res.price / S0) : 0.0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00124}00124             \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00125}00125         \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00126}00126 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00127}00127         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00128}00128     \} \textcolor{keywordflow}{catch} (...) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00129}00129         \textcolor{keyword}{const} \textcolor{keywordtype}{double} nan = std::numeric\_limits<double>::quiet\_NaN();}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00130}00130         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPoints; ++i) \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00131}00131             spots[i]  = nan;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00132}00132             prices[i] = nan;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00133}00133             deltas[i] = nan;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00134}00134         \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00135}00135         \textcolor{keywordflow}{return} -\/99;}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00136}00136     \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00137}00137 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00138}00138 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00139}00139 \} \textcolor{comment}{// namespace}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00140}00140 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00142}\mbox{\hyperlink{VBAExports_8h_ac4d5f836b4da0d599c91e5c0ae7f80e2}{00142}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8cpp_a654ed69ed8d8caa2748556742c9a0fe4}{Lookback\_CallAll}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00143}00143     \textcolor{keywordtype}{double} S0, \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00144}00144     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00145}00145     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00146}00146     \textcolor{keywordtype}{double}* out10)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00147}00147 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00148}00148     \textcolor{keywordflow}{return} compute\_all(\textcolor{keyword}{true}, S0, r, sigma, T, numSteps, numPaths, batchSize, seed, z, out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00149}00149 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00150}00150 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00151}\mbox{\hyperlink{VBAExports_8h_afb374f239f7dae00432b7eaee4210860}{00151}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8cpp_a6ab13fb1947a7dbafb5e6cf0b1a4c17f}{Lookback\_PutAll}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00152}00152     \textcolor{keywordtype}{double} S0, \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00153}00153     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00154}00154     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00155}00155     \textcolor{keywordtype}{double}* out10)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00156}00156 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00157}00157     \textcolor{keywordflow}{return} compute\_all(\textcolor{keyword}{false}, S0, r, sigma, T, numSteps, numPaths, batchSize, seed, z, out10);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00158}00158 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00159}00159 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00160}00160 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00161}\mbox{\hyperlink{VBAExports_8h_ae62b8bd3a8669333469969b571c66216}{00161}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8cpp_a21a1f0073d69ffa1815d52ac4bc92674}{Lookback\_CallCurve}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00162}00162     \textcolor{keywordtype}{double} spotStart, \textcolor{keywordtype}{double} spotStep, \textcolor{keywordtype}{int} nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00163}00163     \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00164}00164     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00165}00165     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00166}00166     \textcolor{keywordtype}{double}* spots, \textcolor{keywordtype}{double}* prices, \textcolor{keywordtype}{double}* deltas)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00167}00167 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00168}00168     \textcolor{keywordflow}{return} compute\_curve(\textcolor{keyword}{true}, spotStart, spotStep, nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00169}00169                          r, sigma, T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00170}00170                          numSteps, numPaths, batchSize, seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00171}00171                          z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00172}00172                          spots, prices, deltas);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00173}00173 \}}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00174}00174 }
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00175}\mbox{\hyperlink{VBAExports_8h_a0472594270323535d6906077a756b095}{00175}} \textcolor{keywordtype}{int} \mbox{\hyperlink{VBAExports_8h_a836583c8fb06b2d1aa204faf95cd6970}{LB\_CALLCONV}} \mbox{\hyperlink{VBAExports_8cpp_ae50aa3cbf551431c00243c4dbe947bac}{Lookback\_PutCurve}}(}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00176}00176     \textcolor{keywordtype}{double} spotStart, \textcolor{keywordtype}{double} spotStep, \textcolor{keywordtype}{int} nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00177}00177     \textcolor{keywordtype}{double} r, \textcolor{keywordtype}{double} sigma, \textcolor{keywordtype}{double} T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00178}00178     \textcolor{keywordtype}{int} numSteps, \textcolor{keywordtype}{int} numPaths, \textcolor{keywordtype}{int} batchSize, \textcolor{keywordtype}{int} seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00179}00179     \textcolor{keywordtype}{double} z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00180}00180     \textcolor{keywordtype}{double}* spots, \textcolor{keywordtype}{double}* prices, \textcolor{keywordtype}{double}* deltas)}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00181}00181 \{}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00182}00182     \textcolor{keywordflow}{return} compute\_curve(\textcolor{keyword}{false}, spotStart, spotStep, nPoints,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00183}00183                          r, sigma, T,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00184}00184                          numSteps, numPaths, batchSize, seed,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00185}00185                          z,}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00186}00186                          spots, prices, deltas);}
+\DoxyCodeLine{\Hypertarget{VBAExports_8cpp_source_l00187}00187 \}}
+
+\end{DoxyCode}

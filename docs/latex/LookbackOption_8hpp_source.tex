@@ -1,0 +1,212 @@
+\hypertarget{LookbackOption_8hpp_source}{}\doxysection{Lookback\+Option.\+hpp}
+\label{LookbackOption_8hpp_source}\index{include/LookbackOption.hpp@{include/LookbackOption.hpp}}
+\mbox{\hyperlink{LookbackOption_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00001}00001 \textcolor{preprocessor}{\#ifndef LOOKBACKOPTION\_HPP}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00002}00002 \textcolor{preprocessor}{\#define LOOKBACKOPTION\_HPP}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00003}00003 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00004}00004 \textcolor{preprocessor}{\#include <algorithm>}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00005}00005 \textcolor{preprocessor}{\#include <cmath>}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00006}00006 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00007}00007 \textcolor{preprocessor}{\#include <omp.h>}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00008}\mbox{\hyperlink{classPayoff}{00008}} \textcolor{keyword}{class }\mbox{\hyperlink{classPayoff}{Payoff}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00009}00009 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00010}00010     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00011}\mbox{\hyperlink{classPayoff_a7c90e584d3e85b04f82677ccbfd9fe4f}{00011}}         \mbox{\hyperlink{classPayoff_a7c90e584d3e85b04f82677ccbfd9fe4f}{Payoff}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00012}\mbox{\hyperlink{classPayoff_aa80374179fe1115f00a5fe899e6ed389}{00012}}         \textcolor{keyword}{virtual} \mbox{\hyperlink{classPayoff_aa80374179fe1115f00a5fe899e6ed389}{\string~Payoff}}() = \textcolor{keywordflow}{default};          }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00013}00013         \textcolor{comment}{// Payoff calculation}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00014}\mbox{\hyperlink{classPayoff_a2eff8d33d2a0f8c3f12a4b0eb6adf6b1}{00014}}         \textcolor{keyword}{virtual} \textcolor{keywordtype}{double} \mbox{\hyperlink{classPayoff_a2eff8d33d2a0f8c3f12a4b0eb6adf6b1}{operator()}}(\textcolor{keywordtype}{double} spot, \textcolor{keywordtype}{double} strike) \textcolor{keyword}{const} = 0; \textcolor{comment}{// I want to call Payoff(spot, strike)}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00015}00015 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00017}\mbox{\hyperlink{classVanillaCallPayoff}{00017}} \textcolor{keyword}{class }\mbox{\hyperlink{classVanillaCallPayoff}{VanillaCallPayoff}} : \textcolor{keyword}{public} \mbox{\hyperlink{classPayoff}{Payoff}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00018}00018 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00019}00019 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00020}\mbox{\hyperlink{classVanillaCallPayoff_a37ba06c827b746cfc917256346c5bf54}{00020}}     \mbox{\hyperlink{classVanillaCallPayoff_a37ba06c827b746cfc917256346c5bf54}{VanillaCallPayoff}}() : \mbox{\hyperlink{classPayoff}{Payoff}}() \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00021}\mbox{\hyperlink{classVanillaCallPayoff_ad58919abe905cfe6f4083ac1f8326ec3}{00021}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaCallPayoff_ad58919abe905cfe6f4083ac1f8326ec3}{operator()}}(\textcolor{keywordtype}{double} spot, \textcolor{keywordtype}{double} strike)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00022}00022 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00023}00023         \textcolor{keywordflow}{return} std::max(spot -\/ strike, 0.0);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00024}00024     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00025}00025 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00026}00026 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00027}\mbox{\hyperlink{classVanillaPutPayoff}{00027}} \textcolor{keyword}{class }\mbox{\hyperlink{classVanillaPutPayoff}{VanillaPutPayoff}} : \textcolor{keyword}{public} \mbox{\hyperlink{classPayoff}{Payoff}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00028}00028 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00029}00029 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00030}\mbox{\hyperlink{classVanillaPutPayoff_ad454f48a19b3233b80c32e69c099d701}{00030}}     \mbox{\hyperlink{classVanillaPutPayoff_ad454f48a19b3233b80c32e69c099d701}{VanillaPutPayoff}}() : \mbox{\hyperlink{classPayoff}{Payoff}}() \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00031}\mbox{\hyperlink{classVanillaPutPayoff_a7103289051b7028b14371cf4ab4ef8e4}{00031}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaPutPayoff_a7103289051b7028b14371cf4ab4ef8e4}{operator()}}(\textcolor{keywordtype}{double} spot, \textcolor{keywordtype}{double} strike)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00032}00032 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00033}00033         \textcolor{keywordflow}{return} std::max(strike -\/ spot, 0.0);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00034}00034     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00035}00035 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00036}00036 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00037}\mbox{\hyperlink{classLookbackFloatingCallPayoff}{00037}} \textcolor{keyword}{class }\mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}} : \textcolor{keyword}{public} \mbox{\hyperlink{classPayoff}{Payoff}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00038}00038 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00039}00039 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00040}\mbox{\hyperlink{classLookbackFloatingCallPayoff_a7a459459dc788fde6a492c20933ed466}{00040}}     \mbox{\hyperlink{classLookbackFloatingCallPayoff_a7a459459dc788fde6a492c20933ed466}{LookbackFloatingCallPayoff}}() : \mbox{\hyperlink{classPayoff}{Payoff}}() \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00041}\mbox{\hyperlink{classLookbackFloatingCallPayoff_ae0f2b7846c413e27cdf4d59e64234684}{00041}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackFloatingCallPayoff_ae0f2b7846c413e27cdf4d59e64234684}{operator()}}(\textcolor{keywordtype}{double} spot, \textcolor{keywordtype}{double} strike)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00042}00042 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00043}00043         \textcolor{keywordflow}{return} spot -\/ strike; \textcolor{comment}{// Always ≥ 0}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00044}00044     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00045}00045 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00047}\mbox{\hyperlink{classLookbackFloatingPutPayoff}{00047}} \textcolor{keyword}{class }\mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}} : \textcolor{keyword}{public} \mbox{\hyperlink{classPayoff}{Payoff}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00048}00048 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00049}00049 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00050}\mbox{\hyperlink{classLookbackFloatingPutPayoff_a7a73963c453978923bf612c187767c85}{00050}}     \mbox{\hyperlink{classLookbackFloatingPutPayoff_a7a73963c453978923bf612c187767c85}{LookbackFloatingPutPayoff}}() : \mbox{\hyperlink{classPayoff}{Payoff}}() \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00051}\mbox{\hyperlink{classLookbackFloatingPutPayoff_a99950e19ab925d5e18a840bc209bf951}{00051}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackFloatingPutPayoff_a99950e19ab925d5e18a840bc209bf951}{operator()}}(\textcolor{keywordtype}{double} spot, \textcolor{keywordtype}{double} strike)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00052}00052 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00053}00053         \textcolor{keywordflow}{return} strike -\/ spot; \textcolor{comment}{// Always ≥ 0 for floating put}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00054}00054     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00055}00055 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00057}\mbox{\hyperlink{classVanillaOption}{00057}} \textcolor{keyword}{class }\mbox{\hyperlink{classVanillaOption}{VanillaOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00058}00058 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00059}00059     \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00060}\mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{00060}}         \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00061}\mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{00061}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00062}\mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{00062}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00063}00063     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00064}\mbox{\hyperlink{classVanillaOption_a484a8162b102e563e6ea2674a67f07a5}{00064}}         \mbox{\hyperlink{classVanillaOption_a484a8162b102e563e6ea2674a67f07a5}{VanillaOption}}(\textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& payoff, \textcolor{keywordtype}{double} strike, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00065}00065             : \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\_}}(payoff), \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\_}}(strike), \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}}(maturity) \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00066}\mbox{\hyperlink{classVanillaOption_adf9825e74f4c688eb39d96275fc8e3e5}{00066}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaOption_adf9825e74f4c688eb39d96275fc8e3e5}{getMaturity}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}}; \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00067}\mbox{\hyperlink{classVanillaOption_abae410e2065e49b12c373c677fbd5f52}{00067}}         \textcolor{keywordtype}{void} \mbox{\hyperlink{classVanillaOption_abae410e2065e49b12c373c677fbd5f52}{setMaturity}}(\textcolor{keywordtype}{double} T) \{ \mbox{\hyperlink{classVanillaOption_ac88e5e4750fd6e5fea26c3be6d553c27}{maturity\_}} = T; \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00068}\mbox{\hyperlink{classVanillaOption_a177696cdd04a58d37b4f8530dbd656ad}{00068}}         \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& \mbox{\hyperlink{classVanillaOption_a177696cdd04a58d37b4f8530dbd656ad}{getPayoff}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_ab9b021cc54b2f1a7d9543a77261f6eb7}{payoff\_}}; \};    }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00069}\mbox{\hyperlink{classVanillaOption_ab8f6cac294ed08aa7a556f1ca0f9faee}{00069}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classVanillaOption_ab8f6cac294ed08aa7a556f1ca0f9faee}{getStrike}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classVanillaOption_a3a6ca41f6f1e4cb2d43c27bd4e3bf87d}{strike\_}}; \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00070}00070 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00071}00071 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00072}\mbox{\hyperlink{classVanillaCallOption}{00072}} \textcolor{keyword}{class }\mbox{\hyperlink{classVanillaCallOption}{VanillaCallOption}} : \textcolor{keyword}{public} \mbox{\hyperlink{classVanillaOption}{VanillaOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00073}00073 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00074}00074     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00075}\mbox{\hyperlink{classVanillaCallOption_ad230db4b8a97a0dab30fe2ab63ad466f}{00075}}         \mbox{\hyperlink{classVanillaCallOption_ad230db4b8a97a0dab30fe2ab63ad466f}{VanillaCallOption}}(\mbox{\hyperlink{classVanillaCallPayoff}{VanillaCallPayoff}}\& payoff, \textcolor{keywordtype}{double} strike, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00076}00076             : \mbox{\hyperlink{classVanillaOption}{VanillaOption}}(payoff, strike, maturity) \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00077}00077 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00079}\mbox{\hyperlink{classVanillaPutOption}{00079}} \textcolor{keyword}{class }\mbox{\hyperlink{classVanillaPutOption}{VanillaPutOption}} : \textcolor{keyword}{public} \mbox{\hyperlink{classVanillaOption}{VanillaOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00080}00080 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00081}00081     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00082}\mbox{\hyperlink{classVanillaPutOption_a5e68d15aea8f8ce5547b92d0cef47b91}{00082}}         \mbox{\hyperlink{classVanillaPutOption_a5e68d15aea8f8ce5547b92d0cef47b91}{VanillaPutOption}}(\mbox{\hyperlink{classVanillaPutPayoff}{VanillaPutPayoff}}\& payoff, \textcolor{keywordtype}{double} strike, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00083}00083             : \mbox{\hyperlink{classVanillaOption}{VanillaOption}}(payoff, strike, maturity) \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00084}00084 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00085}00085 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00086}\mbox{\hyperlink{classLookbackOption}{00086}} \textcolor{keyword}{class }\mbox{\hyperlink{classLookbackOption}{LookbackOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00087}00087 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00088}00088     \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00089}\mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{00089}}         \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00090}\mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{00090}}         \textcolor{keywordtype}{bool} \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{isCall\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00091}\mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{00091}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00092}00092     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00093}\mbox{\hyperlink{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}{00093}}         \mbox{\hyperlink{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}{LookbackOption}}(\textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& payoff, \textcolor{keywordtype}{bool} \mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00094}00094             : \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}(payoff), \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{isCall\_}}(\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}), \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}}(maturity) \{\};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00095}\mbox{\hyperlink{classLookbackOption_a4afd52dd7febd05d34ceccf5910beddd}{00095}}         \textcolor{keyword}{virtual} \mbox{\hyperlink{classLookbackOption_a4afd52dd7febd05d34ceccf5910beddd}{\string~LookbackOption}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00096}\mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{00096}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{getMaturity}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}}; \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00097}\mbox{\hyperlink{classLookbackOption_a675c28493b4554a6393c5b43793397f0}{00097}}         \textcolor{keywordtype}{void} \mbox{\hyperlink{classLookbackOption_a675c28493b4554a6393c5b43793397f0}{setMaturity}}(\textcolor{keywordtype}{double} T) \{ \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}} = T; \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00098}\mbox{\hyperlink{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}{00098}}         \textcolor{keyword}{const} \mbox{\hyperlink{classPayoff}{Payoff}}\& \mbox{\hyperlink{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}{getPayoff}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}; \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00099}\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{00099}}         \textcolor{keywordtype}{bool} \mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{isCall\_}}; \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00100}\mbox{\hyperlink{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}{00100}}         \textcolor{keyword}{virtual} \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}{computeStrike}}(\textcolor{keyword}{const} std::vector<double>\& path, \textcolor{keywordtype}{int} timeIndex) \textcolor{keyword}{const} = 0;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00101}\mbox{\hyperlink{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}{00101}}         \textcolor{keyword}{virtual} std::unique\_ptr<LookbackOption> \mbox{\hyperlink{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}{cloneWithMaturity}}(\textcolor{keywordtype}{double} newT) \textcolor{keyword}{const} = 0;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00102}\mbox{\hyperlink{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}{00102}}         \textcolor{keyword}{virtual} std::vector<double> \mbox{\hyperlink{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}{computePathStrikes}}(\textcolor{keyword}{const} std::vector<double>\& path) \textcolor{keyword}{const} = 0;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00103}\mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{00103}}         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{computePathStrikesInto}}(\textcolor{keyword}{const} std::vector<double>\& path, std::vector<double>\& strikes) \textcolor{keyword}{const} = 0;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00104}00104 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00105}00105 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00106}\mbox{\hyperlink{classLookbackCallOption}{00106}} \textcolor{keyword}{class }\mbox{\hyperlink{classLookbackCallOption}{LookbackCallOption}} : \textcolor{keyword}{public} \mbox{\hyperlink{classLookbackOption}{LookbackOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00107}00107 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00108}00108 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00109}\mbox{\hyperlink{classLookbackCallOption_aaccd67ae0ba6af69af6302871175bac2}{00109}}     \mbox{\hyperlink{classLookbackCallOption_aaccd67ae0ba6af69af6302871175bac2}{LookbackCallOption}}(\textcolor{keyword}{const} \mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}}\& payoff, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00110}00110         : \mbox{\hyperlink{classLookbackOption}{LookbackOption}}(payoff, true, maturity) \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00111}00111 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00112}00112     \textcolor{comment}{// min da timeIndex a T}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00113}\mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{00113}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{computeStrike}}(\textcolor{keyword}{const} std::vector<double>\& path, \textcolor{keywordtype}{int} timeIndex)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00114}00114 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00115}00115         \textcolor{keywordflow}{return} *std::min\_element(path.begin() + timeIndex, path.end());}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00116}00116     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00117}00117 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00118}\mbox{\hyperlink{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}{00118}}     std::unique\_ptr<LookbackOption> \mbox{\hyperlink{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}{cloneWithMaturity}}(\textcolor{keywordtype}{double} newT)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00119}00119 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00120}00120         \textcolor{keywordflow}{return} std::make\_unique<LookbackCallOption>(}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00121}00121             \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const }\mbox{\hyperlink{classLookbackFloatingCallPayoff}{LookbackFloatingCallPayoff}}\&\textcolor{keyword}{>}(\mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}),}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00122}00122             newT}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00123}00123         );}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00124}00124     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00125}00125 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00126}\mbox{\hyperlink{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}{00126}}     std::vector<double> \mbox{\hyperlink{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}{computePathStrikes}}(\textcolor{keyword}{const} std::vector<double>\& path)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00127}00127 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00128}00128         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00129}00129 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00130}00130         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00131}00131         std::vector<double> strikes(M + 1);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00132}00132 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00133}00133         strikes[M] = path[M];}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00134}00134         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00135}00135             strikes[i] = std::min(strikes[i + 1], path[i]);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00136}00136 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00137}00137         \textcolor{keywordflow}{return} strikes;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00138}00138     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00139}00139 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00140}\mbox{\hyperlink{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}{00140}}     \textcolor{keywordtype}{void} \mbox{\hyperlink{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}{computePathStrikesInto}}(\textcolor{keyword}{const} std::vector<double>\& path,}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00141}00141                                 std::vector<double>\& strikes)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00142}00142 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00143}00143         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00144}00144 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00145}00145         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00146}00146 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00147}00147         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(strikes.size()) != M + 1)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00148}00148             strikes.resize(M + 1);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00149}00149 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00150}00150         strikes[M] = path[M];}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00151}00151         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00152}00152             strikes[i] = std::min(strikes[i + 1], path[i]);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00153}00153     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00154}00154 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00156}00156 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00157}\mbox{\hyperlink{classLookbackPutOption}{00157}} \textcolor{keyword}{class }\mbox{\hyperlink{classLookbackPutOption}{LookbackPutOption}} : \textcolor{keyword}{public} \mbox{\hyperlink{classLookbackOption}{LookbackOption}}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00158}00158 \{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00159}00159 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00160}\mbox{\hyperlink{classLookbackPutOption_ac85b6c835ef3a5a897fb394976d10685}{00160}}     \mbox{\hyperlink{classLookbackPutOption_ac85b6c835ef3a5a897fb394976d10685}{LookbackPutOption}}(\textcolor{keyword}{const} \mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}}\& payoff, \textcolor{keywordtype}{double} maturity)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00161}00161         : \mbox{\hyperlink{classLookbackOption}{LookbackOption}}(payoff, false, maturity) \{\}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00162}00162 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00163}00163     \textcolor{comment}{// max da timeIndex a T}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00164}\mbox{\hyperlink{classLookbackPutOption_a31ec8db370ec26d3c7c138645fd42f49}{00164}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classLookbackPutOption_a31ec8db370ec26d3c7c138645fd42f49}{computeStrike}}(\textcolor{keyword}{const} std::vector<double>\& path, \textcolor{keywordtype}{int} timeIndex)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00165}00165 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00166}00166         \textcolor{keywordflow}{return} *std::max\_element(path.begin() + timeIndex, path.end());}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00167}00167     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00168}00168 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00169}\mbox{\hyperlink{classLookbackPutOption_aa2782a77fc5c2639369b121e50d3f144}{00169}}     std::unique\_ptr<LookbackOption> \mbox{\hyperlink{classLookbackPutOption_aa2782a77fc5c2639369b121e50d3f144}{cloneWithMaturity}}(\textcolor{keywordtype}{double} newT)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00170}00170 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00171}00171         \textcolor{keywordflow}{return} std::make\_unique<LookbackPutOption>(}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00172}00172             \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const }\mbox{\hyperlink{classLookbackFloatingPutPayoff}{LookbackFloatingPutPayoff}}\&\textcolor{keyword}{>}(\mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}),}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00173}00173             newT}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00174}00174         );}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00175}00175     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00176}00176 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00177}\mbox{\hyperlink{classLookbackPutOption_a87b53645786de5917374b46e6b29929e}{00177}}     std::vector<double> \mbox{\hyperlink{classLookbackPutOption_a87b53645786de5917374b46e6b29929e}{computePathStrikes}}(\textcolor{keyword}{const} std::vector<double>\& path)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00178}00178 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00179}00179         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00180}00180 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00181}00181         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00182}00182         std::vector<double> strikes(M + 1);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00183}00183 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00184}00184         strikes[M] = path[M];}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00185}00185         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00186}00186             strikes[i] = std::max(strikes[i + 1], path[i]);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00187}00187 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00188}00188         \textcolor{keywordflow}{return} strikes;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00189}00189     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00190}00190 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00191}\mbox{\hyperlink{classLookbackPutOption_aa51c9a2c8e32e2c0a5029badbaa39791}{00191}}     \textcolor{keywordtype}{void} \mbox{\hyperlink{classLookbackPutOption_aa51c9a2c8e32e2c0a5029badbaa39791}{computePathStrikesInto}}(\textcolor{keyword}{const} std::vector<double>\& path,}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00192}00192                                 std::vector<double>\& strikes)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00193}00193 \textcolor{keyword}{    }\{}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00194}00194         \textcolor{keywordflow}{if} (path.empty()) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00195}00195 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00196}00196         \textcolor{keyword}{const} \textcolor{keywordtype}{int} M = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(path.size()) -\/ 1;}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00197}00197 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00198}00198         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(strikes.size()) != M + 1)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00199}00199             strikes.resize(M + 1);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00200}00200 }
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00201}00201         strikes[M] = path[M];}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00202}00202         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = M -\/ 1; i >= 0; -\/-\/i)}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00203}00203             strikes[i] = std::max(strikes[i + 1], path[i]);}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00204}00204     \}}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00205}00205 \};}
+\DoxyCodeLine{\Hypertarget{LookbackOption_8hpp_source_l00206}00206 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// LOOKBACKOPTION\_HPP}}
+
+\end{DoxyCode}

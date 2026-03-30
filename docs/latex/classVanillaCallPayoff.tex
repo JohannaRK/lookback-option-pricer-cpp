@@ -1,0 +1,85 @@
+\hypertarget{classVanillaCallPayoff}{}\doxysection{Vanilla\+Call\+Payoff Class Reference}
+\label{classVanillaCallPayoff}\index{VanillaCallPayoff@{VanillaCallPayoff}}
+
+
+{\ttfamily \#include $<$Lookback\+Option.\+hpp$>$}
+
+
+
+Inheritance diagram for Vanilla\+Call\+Payoff\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classVanillaCallPayoff__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Vanilla\+Call\+Payoff\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classVanillaCallPayoff__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classVanillaCallPayoff_a37ba06c827b746cfc917256346c5bf54}{Vanilla\+Call\+Payoff}} ()
+\item 
+double \mbox{\hyperlink{classVanillaCallPayoff_ad58919abe905cfe6f4083ac1f8326ec3}{operator()}} (double spot, double strike) const override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00017}{17}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classVanillaCallPayoff_a37ba06c827b746cfc917256346c5bf54}\label{classVanillaCallPayoff_a37ba06c827b746cfc917256346c5bf54}} 
+\index{VanillaCallPayoff@{VanillaCallPayoff}!VanillaCallPayoff@{VanillaCallPayoff}}
+\index{VanillaCallPayoff@{VanillaCallPayoff}!VanillaCallPayoff@{VanillaCallPayoff}}
+\doxysubsubsection{\texorpdfstring{VanillaCallPayoff()}{VanillaCallPayoff()}}
+{\footnotesize\ttfamily Vanilla\+Call\+Payoff\+::\+Vanilla\+Call\+Payoff (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00020}{20}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00020 : \mbox{\hyperlink{classPayoff_a7c90e584d3e85b04f82677ccbfd9fe4f}{Payoff}}() \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classVanillaCallPayoff_ad58919abe905cfe6f4083ac1f8326ec3}\label{classVanillaCallPayoff_ad58919abe905cfe6f4083ac1f8326ec3}} 
+\index{VanillaCallPayoff@{VanillaCallPayoff}!operator()@{operator()}}
+\index{operator()@{operator()}!VanillaCallPayoff@{VanillaCallPayoff}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double Vanilla\+Call\+Payoff\+::operator() (\begin{DoxyParamCaption}\item[{double}]{spot,  }\item[{double}]{strike }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classPayoff_a2eff8d33d2a0f8c3f12a4b0eb6adf6b1}{Payoff}}.
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00021}{21}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00022     \{}
+\DoxyCodeLine{00023         \textcolor{keywordflow}{return} std::max(spot -\/ strike, 0.0);}
+\DoxyCodeLine{00024     \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{LookbackOption_8hpp}{Lookback\+Option.\+hpp}}\end{DoxyCompactItemize}

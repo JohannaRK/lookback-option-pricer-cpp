@@ -1,0 +1,228 @@
+\hypertarget{classLookbackOption}{}\doxysection{Lookback\+Option Class Reference}
+\label{classLookbackOption}\index{LookbackOption@{LookbackOption}}
+
+
+{\ttfamily \#include $<$Lookback\+Option.\+hpp$>$}
+
+
+
+Inheritance diagram for Lookback\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{classLookbackOption__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Lookback\+Option\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{classLookbackOption__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}{Lookback\+Option}} (const \mbox{\hyperlink{classPayoff}{Payoff}} \&payoff, bool \mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{is\+Call}}, double maturity)
+\item 
+virtual \mbox{\hyperlink{classLookbackOption_a4afd52dd7febd05d34ceccf5910beddd}{$\sim$\+Lookback\+Option}} ()=default
+\item 
+double \mbox{\hyperlink{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}{get\+Maturity}} () const
+\item 
+void \mbox{\hyperlink{classLookbackOption_a675c28493b4554a6393c5b43793397f0}{set\+Maturity}} (double T)
+\item 
+const \mbox{\hyperlink{classPayoff}{Payoff}} \& \mbox{\hyperlink{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}{get\+Payoff}} () const
+\item 
+bool \mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{is\+Call}} () const
+\item 
+virtual double \mbox{\hyperlink{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}{compute\+Strike}} (const std\+::vector$<$ double $>$ \&path, int time\+Index) const =0
+\item 
+virtual std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} $>$ \mbox{\hyperlink{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}{clone\+With\+Maturity}} (double newT) const =0
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}{compute\+Path\+Strikes}} (const std\+::vector$<$ double $>$ \&path) const =0
+\item 
+virtual void \mbox{\hyperlink{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}{compute\+Path\+Strikes\+Into}} (const std\+::vector$<$ double $>$ \&path, std\+::vector$<$ double $>$ \&strikes) const =0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classPayoff}{Payoff}} \& \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{is\+Call\+\_\+}}
+\item 
+double \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00086}{86}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}\label{classLookbackOption_a9bb507b7f536989be6da25e7913b6ace}} 
+\index{LookbackOption@{LookbackOption}!LookbackOption@{LookbackOption}}
+\index{LookbackOption@{LookbackOption}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{LookbackOption()}{LookbackOption()}}
+{\footnotesize\ttfamily Lookback\+Option\+::\+Lookback\+Option (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classPayoff}{Payoff}} \&}]{payoff,  }\item[{bool}]{is\+Call,  }\item[{double}]{maturity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00093}{93}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00094             : \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}(payoff), \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{isCall\_}}(\mbox{\hyperlink{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}{isCall}}), \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}}(maturity) \{\};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackOption_a4afd52dd7febd05d34ceccf5910beddd}\label{classLookbackOption_a4afd52dd7febd05d34ceccf5910beddd}} 
+\index{LookbackOption@{LookbackOption}!````~LookbackOption@{$\sim$LookbackOption}}
+\index{````~LookbackOption@{$\sim$LookbackOption}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{$\sim$LookbackOption()}{~LookbackOption()}}
+{\footnotesize\ttfamily virtual Lookback\+Option\+::$\sim$\+Lookback\+Option (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}\label{classLookbackOption_ad5cb2fd60251db144c511e4a576e2a27}} 
+\index{LookbackOption@{LookbackOption}!cloneWithMaturity@{cloneWithMaturity}}
+\index{cloneWithMaturity@{cloneWithMaturity}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{cloneWithMaturity()}{cloneWithMaturity()}}
+{\footnotesize\ttfamily virtual std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classLookbackOption}{Lookback\+Option}} $>$ Lookback\+Option\+::clone\+With\+Maturity (\begin{DoxyParamCaption}\item[{double}]{newT }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classLookbackCallOption_ada2897739e543e2024f6fb3ca9c49c78}{Lookback\+Call\+Option}}, and \mbox{\hyperlink{classLookbackPutOption_aa2782a77fc5c2639369b121e50d3f144}{Lookback\+Put\+Option}}.
+
+\mbox{\Hypertarget{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}\label{classLookbackOption_aadffb8019c90424f6d06c5be41de5c15}} 
+\index{LookbackOption@{LookbackOption}!computePathStrikes@{computePathStrikes}}
+\index{computePathStrikes@{computePathStrikes}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{computePathStrikes()}{computePathStrikes()}}
+{\footnotesize\ttfamily virtual std\+::vector$<$ double $>$ Lookback\+Option\+::compute\+Path\+Strikes (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classLookbackCallOption_a9ce25a2eae9bcb33b72b1e0eb7e5f3e9}{Lookback\+Call\+Option}}, and \mbox{\hyperlink{classLookbackPutOption_a87b53645786de5917374b46e6b29929e}{Lookback\+Put\+Option}}.
+
+\mbox{\Hypertarget{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}\label{classLookbackOption_a2d9c1c9851eb49f6edd680690927663a}} 
+\index{LookbackOption@{LookbackOption}!computePathStrikesInto@{computePathStrikesInto}}
+\index{computePathStrikesInto@{computePathStrikesInto}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{computePathStrikesInto()}{computePathStrikesInto()}}
+{\footnotesize\ttfamily virtual void Lookback\+Option\+::compute\+Path\+Strikes\+Into (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path,  }\item[{std\+::vector$<$ double $>$ \&}]{strikes }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classLookbackCallOption_a8a1decde2a7a479e40d6f59a20335479}{Lookback\+Call\+Option}}, and \mbox{\hyperlink{classLookbackPutOption_aa51c9a2c8e32e2c0a5029badbaa39791}{Lookback\+Put\+Option}}.
+
+\mbox{\Hypertarget{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}\label{classLookbackOption_abe61472fa74751af6f8ec28a819a7728}} 
+\index{LookbackOption@{LookbackOption}!computeStrike@{computeStrike}}
+\index{computeStrike@{computeStrike}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{computeStrike()}{computeStrike()}}
+{\footnotesize\ttfamily virtual double Lookback\+Option\+::compute\+Strike (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{path,  }\item[{int}]{time\+Index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classLookbackCallOption_a08e0833069924ca0b272a374640c3e79}{Lookback\+Call\+Option}}, and \mbox{\hyperlink{classLookbackPutOption_a31ec8db370ec26d3c7c138645fd42f49}{Lookback\+Put\+Option}}.
+
+\mbox{\Hypertarget{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}\label{classLookbackOption_a5ae9ef7b080f1874fffb02936ffbed9c}} 
+\index{LookbackOption@{LookbackOption}!getMaturity@{getMaturity}}
+\index{getMaturity@{getMaturity}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{getMaturity()}{getMaturity()}}
+{\footnotesize\ttfamily double Lookback\+Option\+::get\+Maturity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00096}{96}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00096 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}\label{classLookbackOption_abc0f5f3479c7e1195d19b27585eea659}} 
+\index{LookbackOption@{LookbackOption}!getPayoff@{getPayoff}}
+\index{getPayoff@{getPayoff}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{getPayoff()}{getPayoff()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classPayoff}{Payoff}} \& Lookback\+Option\+::get\+Payoff (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00098}{98}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00098 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_accb12139c62674c9a9936fdef53bf071}{payoff\_}}; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}\label{classLookbackOption_aae8c5e3e96dfa4d22cbd525037b404eb}} 
+\index{LookbackOption@{LookbackOption}!isCall@{isCall}}
+\index{isCall@{isCall}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{isCall()}{isCall()}}
+{\footnotesize\ttfamily bool Lookback\+Option\+::is\+Call (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00099}{99}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00099 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}{isCall\_}}; \};}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classLookbackOption_a675c28493b4554a6393c5b43793397f0}\label{classLookbackOption_a675c28493b4554a6393c5b43793397f0}} 
+\index{LookbackOption@{LookbackOption}!setMaturity@{setMaturity}}
+\index{setMaturity@{setMaturity}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{setMaturity()}{setMaturity()}}
+{\footnotesize\ttfamily void Lookback\+Option\+::set\+Maturity (\begin{DoxyParamCaption}\item[{double}]{T }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00097}{97}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00097 \{ \mbox{\hyperlink{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}{maturity\_}} = T; \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}\label{classLookbackOption_ab21eadbdf3ed90476614f0f22434636b}} 
+\index{LookbackOption@{LookbackOption}!isCall\_@{isCall\_}}
+\index{isCall\_@{isCall\_}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{isCall\_}{isCall\_}}
+{\footnotesize\ttfamily bool Lookback\+Option\+::is\+Call\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00090}{90}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+\mbox{\Hypertarget{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}\label{classLookbackOption_a25fe2a9fd04bf3c35201d734578126a6}} 
+\index{LookbackOption@{LookbackOption}!maturity\_@{maturity\_}}
+\index{maturity\_@{maturity\_}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{maturity\_}{maturity\_}}
+{\footnotesize\ttfamily double Lookback\+Option\+::maturity\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00091}{91}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+\mbox{\Hypertarget{classLookbackOption_accb12139c62674c9a9936fdef53bf071}\label{classLookbackOption_accb12139c62674c9a9936fdef53bf071}} 
+\index{LookbackOption@{LookbackOption}!payoff\_@{payoff\_}}
+\index{payoff\_@{payoff\_}!LookbackOption@{LookbackOption}}
+\doxysubsubsection{\texorpdfstring{payoff\_}{payoff\_}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classPayoff}{Payoff}}\& Lookback\+Option\+::payoff\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{LookbackOption_8hpp_source_l00089}{89}} of file \mbox{\hyperlink{LookbackOption_8hpp_source}{Lookback\+Option.\+hpp}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{LookbackOption_8hpp}{Lookback\+Option.\+hpp}}\end{DoxyCompactItemize}
