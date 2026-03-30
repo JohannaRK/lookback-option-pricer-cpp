@@ -1,0 +1,38 @@
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "Lookback Options Pricer"
+PROJECT_BRIEF          = "Monte-Carlo pricing of fixed-strike lookback options (C++ engine + Excel/VBA interface)"
+OUTPUT_DIRECTORY       = docs
+
+INPUT                  = README.md include src test
+
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.hpp *.cpp *.md
+EXTENSION_MAPPING      = md=Markdown
+
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+HIDE_UNDOC_MEMBERS     = NO
+
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX = YES
+
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+STRIP_FROM_PATH        = .
+
+WARNINGS               = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_IF_UNDOCUMENTED   = NO
+
+# Graphs (requires graphviz). Put YES if you want call graphs.
+HAVE_DOT               = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+DOT_NUM_THREADS        = 0
+LATEX_OUTPUT = latex
